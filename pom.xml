@@ -3,22 +3,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ltd.newbee.cloud</groupId>
-    <artifactId>newbee-mall-cloud</artifactId>
+    <groupId>ltd.taoduoduo.cloud</groupId>
+    <artifactId>taoduoduo-mall</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>newbee-mall-cloud</name>
+    <name>taoduoduo-mall</name>
     <packaging>pom</packaging>
-    <description>新蜂商城微服务版本(Spring Cloud Alibaba)</description>
 
     <modules>
-        <module>newbee-mall-cloud-common</module>
-        <module>newbee-mall-cloud-gateway-admin</module>
-        <module>newbee-mall-cloud-gateway-mall</module>
-        <module>newbee-mall-cloud-goods-service</module>
-        <module>newbee-mall-cloud-order-service</module>
-        <module>newbee-mall-cloud-recommend-service</module>
-        <module>newbee-mall-cloud-shop-cart-service</module>
-        <module>newbee-mall-cloud-user-service</module>
+        <module>taoduoduo-mall-common</module>
+        <module>taoduoduo-mall-gateway-admin</module>
+        <module>taoduoduo-mall-gateway-mall</module>
+        <module>taoduoduo-mall-goods-service</module>
+        <module>taoduoduo-mall-order-service</module>
+        <module>taoduoduo-mall-recommend-service</module>
+        <module>taoduoduo-mall-shop-cart-service</module>
+        <module>taoduoduo-mall-user-service</module>
     </modules>
 
     <properties>
