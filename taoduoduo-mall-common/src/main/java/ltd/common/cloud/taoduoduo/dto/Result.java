@@ -19,8 +19,7 @@ public class Result implements Serializable {
     @ApiModelProperty("返回数据")
     private Object data;
 
-    public Result() {
-    }
+    public Result() {}
 
     public Result(int resultCode, String message) {
         this.resultCode = resultCode;
