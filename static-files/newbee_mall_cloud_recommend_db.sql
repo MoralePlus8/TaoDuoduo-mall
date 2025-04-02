@@ -70,9 +70,9 @@ CREATE TABLE `tb_newbee_mall_carousel` (
 
 INSERT INTO `tb_newbee_mall_carousel` (`carousel_id`, `carousel_url`, `redirect_url`, `carousel_rank`, `is_deleted`, `create_time`, `create_user`, `update_time`, `update_user`)
 VALUES
-(1,'https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/banner2.jpg','##',200,1,'2021-08-23 17:50:45',0,'2021-11-10 00:23:01',0),
-(2,'https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/banner1.png','https://juejin.cn/book/7085254558678515742',13,0,'2021-11-29 00:00:00',0,'2021-11-29 00:00:00',0),
-(3,'https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/banner3.jpg','##',0,1,'2021-09-18 18:26:38',0,'2021-11-10 00:23:01',0),
-(5,'https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/banner2.png','https://juejin.cn/book/7085254558678515742',0,0,'2021-11-29 00:00:00',0,'2021-11-29 00:00:00',0),
-(6,'https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/banner1.png','##',101,1,'2021-09-19 23:37:40',0,'2021-11-07 00:15:52',0),
-(7,'https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/banner2.png','##',99,1,'2021-09-19 23:37:58',0,'2021-10-22 00:15:01',0);
+(1,'https://taoduoduo-mall.oss-cn-beijing.aliyuncs.com/images/banner2.jpg','##',200,1,'2021-08-23 17:50:45',0,'2021-11-10 00:23:01',0),
+(2,'https://taoduoduo-mall.oss-cn-beijing.aliyuncs.com/images/banner1.png','https://juejin.cn/book/7085254558678515742',13,0,'2021-11-29 00:00:00',0,'2021-11-29 00:00:00',0),
+(3,'https://taoduoduo-mall.oss-cn-beijing.aliyuncs.com/images/banner3.jpg','##',0,1,'2021-09-18 18:26:38',0,'2021-11-10 00:23:01',0),
+(5,'https://taoduoduo-mall.oss-cn-beijing.aliyuncs.com/images/banner2.png','https://juejin.cn/book/7085254558678515742',0,0,'2021-11-29 00:00:00',0,'2021-11-29 00:00:00',0),
+(6,'https://taoduoduo-mall.oss-cn-beijing.aliyuncs.com/images/banner1.png','##',101,1,'2021-09-19 23:37:40',0,'2021-11-07 00:15:52',0),
+(7,'https://taoduoduo-mall.oss-cn-beijing.aliyuncs.com/images/banner2.png','##',99,1,'2021-09-19 23:37:58',0,'2021-10-22 00:15:01',0);
