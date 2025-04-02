@@ -1,4 +1,4 @@
-package ltd.user.cloud.newbee.config.annotation;
+package ltd.user.cloud.taoduoduo.config.annotation;
 
 import java.lang.annotation.*;
 

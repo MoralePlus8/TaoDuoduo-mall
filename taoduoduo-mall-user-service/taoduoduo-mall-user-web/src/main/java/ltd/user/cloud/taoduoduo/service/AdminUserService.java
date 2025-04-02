@@ -1,8 +1,8 @@
-package ltd.user.cloud.newbee.service;
+package ltd.user.cloud.taoduoduo.service;
 
-import ltd.common.cloud.newbee.util.NumberUtil;
-import ltd.common.cloud.newbee.util.SystemUtil;
-import ltd.user.cloud.newbee.entity.AdminUser;
+import ltd.common.cloud.taoduoduo.util.NumberUtil;
+import ltd.common.cloud.taoduoduo.util.SystemUtil;
+import ltd.user.cloud.taoduoduo.entity.AdminUser;
 
 public interface AdminUserService {
 

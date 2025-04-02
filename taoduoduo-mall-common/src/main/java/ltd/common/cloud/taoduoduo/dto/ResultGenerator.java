@@ -1,4 +1,4 @@
-package ltd.common.cloud.newbee.dto;
+package ltd.common.cloud.taoduoduo.dto;
 
 import org.springframework.util.StringUtils;
 
@@ -8,6 +8,8 @@ public class ResultGenerator {
     private static final int RESULT_CODE_SUCCESS = 200;
     private static final int RESULT_CODE_REQUEST_ERROR = 400;
     private static final int RESULT_CODE_SERVER_ERROR = 500;
+
+    private ResultGenerator() {}
 
     public static Result genSuccessResult() {
         Result result = new Result();

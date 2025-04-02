@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageQueryUtil;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
-import ltd.common.cloud.taoduoduo.exception.NewBeeMallException;
 import ltd.common.cloud.taoduoduo.pojo.MallUserToken;
 import ltd.common.cloud.taoduoduo.util.MD5Util;
 import ltd.user.cloud.taoduoduo.controller.param.MallUserUpdateParam;

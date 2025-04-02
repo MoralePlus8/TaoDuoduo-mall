@@ -1,4 +1,4 @@
-package ltd.common.cloud.newbee.dto;
+package ltd.common.cloud.taoduoduo.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

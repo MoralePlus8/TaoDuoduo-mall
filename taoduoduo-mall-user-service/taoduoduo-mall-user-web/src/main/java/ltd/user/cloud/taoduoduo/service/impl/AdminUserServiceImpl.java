@@ -1,10 +1,10 @@
-package ltd.user.cloud.newbee.service.impl;
+package ltd.user.cloud.taoduoduo.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import ltd.common.cloud.newbee.pojo.AdminUserToken;
-import ltd.user.cloud.newbee.dao.AdminUserMapper;
-import ltd.user.cloud.newbee.entity.AdminUser;
-import ltd.user.cloud.newbee.service.AdminUserService;
+import ltd.common.cloud.taoduoduo.pojo.AdminUserToken;
+import ltd.user.cloud.taoduoduo.dao.AdminUserMapper;
+import ltd.user.cloud.taoduoduo.entity.AdminUser;
+import ltd.user.cloud.taoduoduo.service.AdminUserService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
