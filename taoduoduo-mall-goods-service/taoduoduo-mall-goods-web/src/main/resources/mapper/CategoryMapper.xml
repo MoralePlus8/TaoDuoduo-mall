@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ltd.goods.cloud.taoduoduo.mapper.CategoryMapper">
+
+    <update id="update" parameterType="ltd.goods.cloud.taoduoduo.entity.Category">
+        UPDATE tb_newbee_mall_goods_category
+        <set>
+            <if test="categoryLevel != null">category_level = #{categoryLevel}, </if>
+            <if test="parentId != null">parent_id = #{parentId}, </if>
+            <if test="categoryName != null">category_name = #{categoryName}, </if>
+            <if test="categoryRank != null">category_rank = #{categoryRank}, </if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted}, </if>
+            <if test="createTime != null">create_time = #{createTime}, </if>
+            <if test="createUser != null">create_user = #{createUser}, </if>
+            <if test="updateTime != null">update_time = #{updateTime}, </if>
+            <if test="updateUser != null">update_user = #{updateUser}, </if>
+        </set>
+        WHERE category_id = #{categoryId}
+    </update>
+
+    <select id="pageQuery" resultType="ltd.goods.cloud.taoduoduo.entity.Category">
+        SELECT *
+        FROM tb_newbee_mall_goods_category
+        <where>
+            <if test="categoryLevel != null and categoryLevel != ''">
+                AND category_level = #{categoryLevel}
+            </if>
+            <if test="parentId != null and parentId != ''">
+                AND parent_id = #{parentId}
+            </if>
+            AND is_deleted = 0
+        </where>
+        ORDER BY category_rank DESC
+    </select>
+
+    <update id="deleteBatch">
+        UPDATE tb_newbee_mall_goods_category
+        SET is_deleted = 1
+        WHERE category_id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

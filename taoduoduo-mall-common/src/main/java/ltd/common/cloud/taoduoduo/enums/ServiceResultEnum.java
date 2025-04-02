@@ -7,6 +7,8 @@ public enum ServiceResultEnum {
 
     DATA_NOT_EXIST("未查询到记录！"),
 
+    DELETE_FAILED_ERROR("删除失败！"),
+
     PARAM_ERROR("参数错误！"),
 
     SAME_CATEGORY_EXIST("已存在同级同名的分类！"),

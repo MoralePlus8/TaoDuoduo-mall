@@ -10,13 +10,13 @@ import java.util.List;
 public class PageResult<T> implements Serializable {
 
     @ApiModelProperty("总记录数")
-    private int totalCount;
+    private long totalCount;
 
     @ApiModelProperty("每页记录数")
     private int pageSize;
 
     @ApiModelProperty("总页数")
-    private int totalPage;
+    private long totalPage;
 
     @ApiModelProperty("当前页数")
     private int currPage;
@@ -24,12 +24,12 @@ public class PageResult<T> implements Serializable {
     @ApiModelProperty("列表数据")
     private List<T> list;
 
-    public PageResult(List<T> list, int totalCount, int pageSize, int currPage) {
+    public PageResult(List<T> list, long totalCount, int pageSize, int currPage) {
         this.list = list;
         this.totalCount = totalCount;
         this.pageSize = pageSize;
         this.currPage = currPage;
-        this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
+        this.totalPage = (long) Math.ceil((double) totalCount / pageSize);
     }
 
 }
