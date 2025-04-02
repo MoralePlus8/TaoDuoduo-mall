@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -57,7 +58,7 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
             mallUserToken.setUserId(user.getUserId());
             mallUserToken.setToken(token);
             ValueOperations<Object, Object> setToken = redisTemplate.opsForValue();
-            setToken.set(token, mallUserToken, 7 * 24 * 60 * 60, TimeUnit.SECONDS);
+            setToken.set(token, mallUserToken, (long)7 * 24 * 60 * 60, TimeUnit.SECONDS);
 
             return token;
         }
@@ -100,17 +101,23 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
 
     @Override
     public Boolean logout(String token) {
-        return null;
+        redisTemplate.delete(token);
+        return true;
     }
 
     @Override
     public Boolean lockUsers(Long[] ids, int lockStatus) {
-        return null;
+        if(ids.length < 1){
+            return false;
+        }
+        return mallUserMapper.lockUserBatch(ids, lockStatus) > 0;
     }
 
     @Override
     public PageResult<?> getNewBeeMallUsersPage(PageQueryUtil pageUtil) {
-        return null;
+        List<MallUser> mallUsers=mallUserMapper.findMallUserList(pageUtil);
+        int total=mallUserMapper.getTotalMallUsers(pageUtil);
+        return new PageResult<>(mallUsers,total,pageUtil.getLimit(),pageUtil.getPage());
     }
 
 }
