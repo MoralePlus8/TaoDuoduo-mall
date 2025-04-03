@@ -8,7 +8,7 @@ import ltd.goods.cloud.taoduoduo.entity.Category;
 
 import javax.validation.Valid;
 
-public interface CategoryService {
+public interface CategoryAdminService {
 
     String save(Category category);
 

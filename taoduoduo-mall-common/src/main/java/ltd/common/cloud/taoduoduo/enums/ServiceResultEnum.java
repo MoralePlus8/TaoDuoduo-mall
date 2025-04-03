@@ -1,5 +1,8 @@
 package ltd.common.cloud.taoduoduo.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum ServiceResultEnum {
     ERROR("error"),
 
@@ -83,17 +86,10 @@ public enum ServiceResultEnum {
 
     DB_ERROR("database error");
 
-    private String result;
+    private final String result;
 
     ServiceResultEnum(String result) {
         this.result = result;
     }
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
 }

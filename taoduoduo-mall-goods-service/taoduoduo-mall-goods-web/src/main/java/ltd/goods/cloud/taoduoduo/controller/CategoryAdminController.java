@@ -12,7 +12,7 @@ import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategorySaveDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategoryUpdateDTO;
 import ltd.goods.cloud.taoduoduo.entity.Category;
-import ltd.goods.cloud.taoduoduo.service.CategoryService;
+import ltd.goods.cloud.taoduoduo.service.CategoryAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -24,20 +24,20 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/categories/admin")
 @Api(value = "v1", tags = "后台管理系统分类模块接口")
-public class CategoryController {
+public class CategoryAdminController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final CategoryService categoryService;
+    private final CategoryAdminService categoryAdminService;
 
     @PostMapping("/add")
     @ApiOperation(value = "新增分类", notes = "新增分类")
     public Result save(@RequestBody @Valid CategorySaveDTO categorySaveDTO) {
-        logger.info("Newly added category: {}", categorySaveDTO);
+        logger.info("Add new category: {}", categorySaveDTO);
 
         Category category = new Category();
         BeanUtils.copyProperties(categorySaveDTO, category);
-        String result = categoryService.save(category);
+        String result = categoryAdminService.save(category);
 
         if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
             return ResultGenerator.genSuccessResult();
@@ -49,11 +49,11 @@ public class CategoryController {
     @PutMapping("/update")
     @ApiOperation(value = "修改分类信息", notes = "修改分类信息")
     public Result update(@RequestBody @Valid CategoryUpdateDTO categoryUpdateDTO) {
-        logger.info("Updated category: {}", categoryUpdateDTO);
+        logger.info("Update category: {}", categoryUpdateDTO);
 
         Category category = new Category();
         BeanUtils.copyProperties(categoryUpdateDTO, category);
-        String result = categoryService.update(category);
+        String result = categoryAdminService.update(category);
 
         if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
             return ResultGenerator.genSuccessResult();
@@ -67,7 +67,7 @@ public class CategoryController {
     public Result detail(@PathVariable("id") Long id) {
         logger.info("Get detailed category: {}", id);
 
-        Category category = categoryService.getById(id);
+        Category category = categoryAdminService.getById(id);
 
         if (category == null) {
             return ResultGenerator.genFailResult(ServiceResultEnum.DATA_NOT_EXIST.getResult());
@@ -82,7 +82,7 @@ public class CategoryController {
     public Result list(@RequestBody @Valid CategoryPageQueryDTO categoryPageQueryDTO) {
         logger.info("Get the list of categories");
 
-        PageResult<Category> pageResult = categoryService.pageQuery(categoryPageQueryDTO);
+        PageResult<Category> pageResult = categoryAdminService.pageQuery(categoryPageQueryDTO);
 
         return ResultGenerator.genSuccessResult(pageResult);
     }
@@ -92,7 +92,7 @@ public class CategoryController {
     public Result delete(@RequestBody BatchIdDTO batchIdDTO) {
         logger.info("Delete categories: {}", batchIdDTO);
 
-        String result = categoryService.deleteBatch(batchIdDTO);
+        String result = categoryAdminService.deleteBatch(batchIdDTO);
         if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
             return ResultGenerator.genSuccessResult();
         } else {
