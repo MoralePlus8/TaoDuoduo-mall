@@ -9,26 +9,26 @@ import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.goods.cloud.taoduoduo.dto.BatchIdDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.entity.Category;
-import ltd.goods.cloud.taoduoduo.mapper.CategoryAdminMapper;
-import ltd.goods.cloud.taoduoduo.service.CategoryAdminService;
+import ltd.goods.cloud.taoduoduo.mapper.CategoryMapper;
+import ltd.goods.cloud.taoduoduo.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryAdminServiceImpl implements CategoryAdminService {
+public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryAdminMapper categoryAdminMapper;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public String save(Category category) {
-        Category existingCategory = categoryAdminMapper.findByLevelAndName(category.getCategoryLevel(), category.getCategoryName());
+        Category existingCategory = categoryMapper.findByLevelAndName(category.getCategoryLevel(), category.getCategoryName());
         if (existingCategory != null) {
             return ServiceResultEnum.SAME_CATEGORY_EXIST.getResult();
         }
 
-        if (categoryAdminMapper.insert(category) > 0) {
+        if (categoryMapper.insert(category) > 0) {
             return ServiceResultEnum.SUCCESS.getResult();
         }
 
@@ -37,19 +37,19 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     public String update(Category category) {
-        Category existingCategory = categoryAdminMapper.findById(category.getCategoryId());
+        Category existingCategory = categoryMapper.findById(category.getCategoryId());
         if (existingCategory == null) {
             return ServiceResultEnum.DATA_NOT_EXIST.getResult();
         }
 
         /* 当前存在同名但id不同的分类 */
-        Category duplicateCategory = categoryAdminMapper.findByLevelAndName(category.getCategoryLevel(), category.getCategoryName());
+        Category duplicateCategory = categoryMapper.findByLevelAndName(category.getCategoryLevel(), category.getCategoryName());
         if (duplicateCategory != null && !duplicateCategory.getCategoryId().equals(category.getCategoryId())) {
             return ServiceResultEnum.SAME_CATEGORY_EXIST.getResult();
         }
 
         category.setUpdateTime(new Date());
-        if (categoryAdminMapper.update(category) > 0) {
+        if (categoryMapper.update(category) > 0) {
             return ServiceResultEnum.SUCCESS.getResult();
         }
 
@@ -58,13 +58,13 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     public Category getById(Long id) {
-        return categoryAdminMapper.findById(id);
+        return categoryMapper.findById(id);
     }
 
     @Override
     public PageResult<Category> pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
         PageMethod.startPage(categoryPageQueryDTO.getPageNumber(), categoryPageQueryDTO.getPageSize());
-        Page<Category> page = categoryAdminMapper.pageQuery(categoryPageQueryDTO);
+        Page<Category> page = categoryMapper.pageQuery(categoryPageQueryDTO);
 
         return new PageResult<>(page.getResult(), page.getTotal(), page.getPageSize(), page.getPageNum());
     }
@@ -75,7 +75,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
             return ServiceResultEnum.PARAM_ERROR.getResult();
         }
 
-        if (categoryAdminMapper.deleteBatch(batchIdDTO.getIds()) > 0) {
+        if (categoryMapper.deleteBatch(batchIdDTO.getIds()) > 0) {
             return ServiceResultEnum.SUCCESS.getResult();
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="ltd.goods.cloud.taoduoduo.mapper.CategoryAdminMapper">
+<mapper namespace="ltd.goods.cloud.taoduoduo.mapper.CategoryMapper">
 
     <update id="update" parameterType="ltd.goods.cloud.taoduoduo.entity.Category">
         UPDATE tb_newbee_mall_goods_category

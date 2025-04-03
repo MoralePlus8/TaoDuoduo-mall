@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
-public interface CategoryAdminMapper {
+public interface CategoryMapper {
 
     @Select("SELECT * " +
             "FROM tb_newbee_mall_goods_category " +
