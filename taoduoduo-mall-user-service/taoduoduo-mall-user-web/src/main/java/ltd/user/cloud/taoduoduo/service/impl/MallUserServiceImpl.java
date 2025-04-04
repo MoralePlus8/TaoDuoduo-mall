@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageQueryUtil;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
+import ltd.common.cloud.taoduoduo.exception.*;
 import ltd.common.cloud.taoduoduo.pojo.MallUserToken;
 import ltd.common.cloud.taoduoduo.util.MD5Util;
 import ltd.user.cloud.taoduoduo.controller.param.MallUserUpdateParam;
@@ -27,9 +28,9 @@ public class MallUserServiceImpl implements MallUserService {
 
 
     @Override
-    public String register(String loginName, String password) {
+    public String register(String loginName, String password) throws UserNameExistException, DataBaseErrorException {
         if(mallUserMapper.selectByLoginName(loginName) != null) {
-            return ServiceResultEnum.SAME_LOGIN_NAME_EXIST.getResult();
+            throw new UserNameExistException();
         }
 
         MallUser registerUser = new MallUser();
@@ -41,15 +42,15 @@ public class MallUserServiceImpl implements MallUserService {
         if(mallUserMapper.insertSelective(registerUser) > 0) {
             return ServiceResultEnum.SUCCESS.getResult();
         }
-        return ServiceResultEnum.DB_ERROR.getResult();
+        throw new DataBaseErrorException();
     }
 
     @Override
-    public String login(String loginName, String passwordMD5) {
+    public String login(String loginName, String passwordMD5) throws UserLockedException, LoginException {
         MallUser user=mallUserMapper.selectByLoginNameAndPasswd(loginName,passwordMD5);
         if(user!=null) {
             if(user.getLockedFlag()==1) {
-                return ServiceResultEnum.LOGIN_USER_LOCKED_ERROR.getResult();
+                throw new UserLockedException();
             }
 
             String token = getNewToken(System.currentTimeMillis() + "", user.getUserId());
@@ -62,14 +63,14 @@ public class MallUserServiceImpl implements MallUserService {
             return token;
         }
 
-        return ServiceResultEnum.LOGIN_ERROR.getResult();
+        throw new LoginException();
     }
 
     @Override
-    public Boolean updateUserInfo(MallUserUpdateParam mallUser, Long userId) {
+    public Boolean updateUserInfo(MallUserUpdateParam mallUser, Long userId) throws UserNotExistException {
         MallUser user = mallUserMapper.selectByPrimaryKey(userId);
         if(user==null){
-            NewBeeMallException.fail(ServiceResultEnum.DATA_NOT_EXIST.getResult());
+            throw new UserNotExistException();
         }
 
         user.setNickName(mallUser.getNickName());
@@ -81,21 +82,20 @@ public class MallUserServiceImpl implements MallUserService {
     }
 
     @Override
-    public MallUser getUserDetailByToken(String token) {
+    public MallUser getUserDetailByToken(String token) throws TokenNotExistException, UserLockedException {
         ValueOperations<Object, Object> valueOperations = redisTemplate.opsForValue();
         MallUserToken mallUserToken = (MallUserToken) valueOperations.get(token);
         if(mallUserToken != null) {
             MallUser mallUser = mallUserMapper.selectByPrimaryKey(mallUserToken.getUserId());
             if(mallUser == null){
-                NewBeeMallException.fail(ServiceResultEnum.DATA_NOT_EXIST.getResult());
+                throw new TokenNotExistException();
             }
             if(mallUser.getLockedFlag().intValue() == 1) {
-                NewBeeMallException.fail(ServiceResultEnum.LOGIN_USER_LOCKED_ERROR.getResult());
+                throw new UserLockedException();
             }
             return mallUser;
         }
-        NewBeeMallException.fail(ServiceResultEnum.DATA_NOT_EXIST.getResult());
-        return null;
+        throw new TokenNotExistException();
     }
 
     @Override

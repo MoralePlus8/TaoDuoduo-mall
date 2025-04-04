@@ -35,16 +35,23 @@ public class PersonalController {
         if(!NumberUtil.isPhone(mallUserLoginParam.getLoginName())) {
             return ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_NAME_IS_NOT_PHONE.getResult());
         }
-        String loginResult = mallUserService.login(mallUserLoginParam.getLoginName(), mallUserLoginParam.getPasswordMd5());
-        logger.info("login api,loginName={},loginResult={}", mallUserLoginParam.getLoginName(), loginResult);
 
-        if(loginResult != null && loginResult.length() == 32) {
-            Result result = ResultGenerator.genSuccessResult();
-            result.setData(loginResult);
-            return result;
+        try{
+            String loginResult = mallUserService.login(mallUserLoginParam.getLoginName(), mallUserLoginParam.getPasswordMd5());
+            logger.info("login api,loginName={},loginResult={}", mallUserLoginParam.getLoginName(), loginResult);
+
+            if(loginResult != null && loginResult.length() == 32) {
+                Result result = ResultGenerator.genSuccessResult();
+                result.setData(loginResult);
+                return result;
+            }
+
+            return ResultGenerator.genFailResult(loginResult);
+        }catch (Exception e){
+            logger.error("login api,loginName={},error={}", mallUserLoginParam.getLoginName(), e.getStackTrace());
+            return ResultGenerator.genFailResult("登录失败");
         }
 
-        return ResultGenerator.genFailResult(loginResult);
     }
 
     @PostMapping("/logout")
@@ -59,7 +66,6 @@ public class PersonalController {
             return ResultGenerator.genFailResult("登出失败");
         }
     }
-
 
 
 }
