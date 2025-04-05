@@ -7,9 +7,9 @@ import lombok.Getter;
 public enum CategoryLevelEnum {
 
     DEFAULT(0, "ERROR"),
-    LEVEL_ONE(1, "一级分类"),
-    LEVEL_TWO(2, "二级分类"),
-    LEVEL_THREE(3, "三级分类");
+    LEVEL_FIRST(1, "一级分类"),
+    LEVEL_SECOND(2, "二级分类"),
+    LEVEL_THIRD(3, "三级分类");
 
     private final int level;
 

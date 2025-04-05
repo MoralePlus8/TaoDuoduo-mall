@@ -16,7 +16,7 @@ public interface GoodsService {
 
     String update(Goods goods);
 
-    Goods getById(Long id);
+    Goods getGoodsById(Long id);
 
     PageResult<Goods> pageQuery(@Valid GoodsPageQueryDTO goodsPageQueryDTO);
 
@@ -24,5 +24,7 @@ public interface GoodsService {
 
     String updateStock(StockNumUpdateDTO stockNumUpdateDTO);
 
-    List<Goods> getByIds(List<Long> goodsIds);
+    List<Goods> getGoodsByIds(List<Long> goodsIds);
+
+    Goods getGoodsOnSale(Long goodsId);
 }

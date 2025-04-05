@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
-import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.goods.cloud.taoduoduo.dto.*;
 import ltd.goods.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
@@ -42,13 +41,9 @@ public class GoodsAdminController {
 
         Goods goods = new Goods();
         BeanUtils.copyProperties(goodsSaveDTO, goods);
-        String result = goodsService.save(goods);
+        goodsService.save(goods);
 
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(result);
-        }
+        return ResultGenerator.genSuccessResult();
     }
 
     @PutMapping("/update")
@@ -58,13 +53,9 @@ public class GoodsAdminController {
 
         Goods goods = new Goods();
         BeanUtils.copyProperties(goodsUpdateDTO, goods);
-        String result = goodsService.update(goods);
+        goodsService.update(goods);
 
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(result);
-        }
+        return ResultGenerator.genSuccessResult();
     }
 
     @GetMapping("/detail/{id}")
@@ -72,25 +63,23 @@ public class GoodsAdminController {
     public Result detail(@PathVariable("id") Long id) {
         logger.info("Get goods detail: {}", id);
 
-        Goods goods = goodsService.getById(id);
-        if (goods == null) {
-            return ResultGenerator.genFailResult(ServiceResultEnum.DATA_NOT_EXIST.getResult());
-        }
+        Goods goods = goodsService.getGoodsById(id);
 
         Map<String, Object> goodsDetail = new HashMap<>();
         goodsDetail.put("goods", goods);
-        Category thirdCategory = categoryService.getById(goods.getGoodsCategoryId());
+        Category thirdCategory = categoryService.getCategoryById(goods.getGoodsCategoryId());
         if (thirdCategory != null) {
             goodsDetail.put("thirdCategory", thirdCategory);
-            Category secondCategory = categoryService.getById(thirdCategory.getParentId());
+            Category secondCategory = categoryService.getCategoryById(thirdCategory.getParentId());
             if (secondCategory != null) {
                 goodsDetail.put("secondCategory", secondCategory);
-                Category firstCategory = categoryService.getById(secondCategory.getParentId());
+                Category firstCategory = categoryService.getCategoryById(secondCategory.getParentId());
                 if (firstCategory != null) {
                     goodsDetail.put("firstCategory", firstCategory);
                 }
             }
         }
+
         return ResultGenerator.genSuccessResult(goodsDetail);
     }
 
@@ -108,7 +97,7 @@ public class GoodsAdminController {
     @GetMapping("/listByGoodsIds")
     @ApiOperation(value = "根据ids查询商品列表", notes = "根据ids查询")
     public Result listByIds(@RequestParam("goodsIds") List<Long> goodsIds) {
-        List<Goods> goodsList = goodsService.getByIds(goodsIds);
+        List<Goods> goodsList = goodsService.getGoodsByIds(goodsIds);
 
         return ResultGenerator.genSuccessResult(goodsList);
     }
@@ -118,12 +107,9 @@ public class GoodsAdminController {
     public Result updateStatus(@RequestBody BatchIdDTO batchIdDTO, @PathVariable("sellStatus") Integer sellStatus) {
         logger.info("Update the status of goods to {}: {}", sellStatus, batchIdDTO);
 
-        String result = goodsService.batchUpdateSellStatus(batchIdDTO, sellStatus);
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(result);
-        }
+        goodsService.batchUpdateSellStatus(batchIdDTO, sellStatus);
+
+        return ResultGenerator.genSuccessResult();
     }
 
     @PutMapping("/updateStock")
@@ -131,11 +117,8 @@ public class GoodsAdminController {
     public Result updateStock(@RequestBody StockNumUpdateDTO stockNumUpdateDTO) {
         logger.info("Update stock: {}", stockNumUpdateDTO);
 
-        String result = goodsService.updateStock(stockNumUpdateDTO);
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(result);
-        }
+        goodsService.updateStock(stockNumUpdateDTO);
+
+        return ResultGenerator.genSuccessResult();
     }
 }

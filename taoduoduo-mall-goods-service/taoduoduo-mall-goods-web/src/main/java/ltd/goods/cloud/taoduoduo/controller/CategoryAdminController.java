@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
-import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.goods.cloud.taoduoduo.dto.BatchIdDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategorySaveDTO;
@@ -37,13 +36,9 @@ public class CategoryAdminController {
 
         Category category = new Category();
         BeanUtils.copyProperties(categorySaveDTO, category);
-        String result = categoryService.save(category);
+        categoryService.save(category);
 
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(result);
-        }
+        return ResultGenerator.genSuccessResult();
     }
 
     @PutMapping("/update")
@@ -53,13 +48,9 @@ public class CategoryAdminController {
 
         Category category = new Category();
         BeanUtils.copyProperties(categoryUpdateDTO, category);
-        String result = categoryService.update(category);
+        categoryService.update(category);
 
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(result);
-        }
+        return ResultGenerator.genSuccessResult();
     }
 
     @GetMapping("/detail/{id}")
@@ -67,13 +58,9 @@ public class CategoryAdminController {
     public Result detail(@PathVariable("id") Long id) {
         logger.info("Get detailed category: {}", id);
 
-        Category category = categoryService.getById(id);
+        Category category = categoryService.getCategoryById(id);
 
-        if (category == null) {
-            return ResultGenerator.genFailResult(ServiceResultEnum.DATA_NOT_EXIST.getResult());
-        } else {
-            return ResultGenerator.genSuccessResult(category);
-        }
+        return ResultGenerator.genSuccessResult(category);
     }
 
     @GetMapping("/list")
@@ -92,12 +79,9 @@ public class CategoryAdminController {
     public Result delete(@RequestBody BatchIdDTO batchIdDTO) {
         logger.info("Delete categories: {}", batchIdDTO);
 
-        String result = categoryService.deleteBatch(batchIdDTO);
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(result);
-        }
+        categoryService.deleteBatch(batchIdDTO);
+
+        return ResultGenerator.genSuccessResult();
     }
 
     @GetMapping("/list4Select")

@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface CategoryMapper {
 
@@ -29,4 +31,6 @@ public interface CategoryMapper {
     Page<Category> pageQuery(CategoryPageQueryDTO categoryPageQueryDTO);
 
     int deleteBatch(Long[] ids);
+
+    List<Category> findByLevelAndParentIdsAndNumber(List<Long> parentIds, int categoryLevel, int number);
 }
