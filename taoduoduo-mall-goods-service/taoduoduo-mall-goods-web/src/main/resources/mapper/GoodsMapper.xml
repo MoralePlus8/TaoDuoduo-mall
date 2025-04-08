@@ -30,16 +30,16 @@
         FROM tb_newbee_mall_goods_info
         <where>
             <if test="goodsName != null and goodsName != ''">
-                AND goods_name LIKE CONCAT('%','#{goodsName}','%')
+                AND goods_name LIKE CONCAT('%', #{goodsName}, '%')
             </if>
-            <if test="goodsSellStatus != null and goodsSellStatus != ''">
+            <if test="goodsSellStatus != null">
                 AND goods_sell_status = #{goodsSellStatus}
             </if>
             <if test="startTime != null and startTime.trim() != ''">
-                AND create_time > #{startTime}
+                AND create_time &gt; #{startTime}
             </if>
             <if test="endTime != null and endTime.trim() != ''">
-                AND create_time < #{endTime}
+                AND create_time &lt; #{endTime}
             </if>
         </where>
         ORDER BY goods_id DESC
