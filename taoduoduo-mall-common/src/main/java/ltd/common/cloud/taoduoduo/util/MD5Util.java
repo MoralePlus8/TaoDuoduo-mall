@@ -1,8 +1,15 @@
 package ltd.common.cloud.taoduoduo.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.security.MessageDigest;
 
 public class MD5Util {
+
+    private MD5Util() {}
+
+    private static final Logger logger = LoggerFactory.getLogger(MD5Util.class);
 
     private static String byteArrayToHexString(byte[] b) {
         StringBuilder resultSb = new StringBuilder();
@@ -20,7 +27,7 @@ public class MD5Util {
         return hexDigits[d1] + hexDigits[d2];
     }
 
-    public static String MD5Encode(String origin, String charsetname) {
+    public static String md5Encode(String origin, String charsetname) {
         String resultString = null;
         try {
             resultString = origin;
@@ -32,6 +39,7 @@ public class MD5Util {
                 resultString = byteArrayToHexString(md.digest(resultString
                         .getBytes(charsetname)));
         } catch (Exception exception) {
+            logger.info("MD5加密失败", exception);
         }
         return resultString;
     }

@@ -1,6 +1,8 @@
 package ltd.common.cloud.taoduoduo.exception;
 
-public class LoginException extends Exception{
+import org.springframework.security.core.AuthenticationException;
+
+public class LoginException extends AuthenticationException {
     public LoginException() {
         super("用户名或密码错误");
     }

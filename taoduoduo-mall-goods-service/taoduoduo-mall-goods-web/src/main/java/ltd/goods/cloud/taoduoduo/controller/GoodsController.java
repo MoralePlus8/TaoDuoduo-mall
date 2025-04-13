@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
-import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
 import ltd.goods.cloud.taoduoduo.service.GoodsService;
 import ltd.goods.cloud.taoduoduo.vo.GoodsDetailVO;

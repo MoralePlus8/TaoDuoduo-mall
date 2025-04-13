@@ -2,9 +2,7 @@ package ltd.common.cloud.taoduoduo.util;
 
 public class NumberUtil {
 
-    public static boolean isPhone(String phone) {
-        return phone.matches("^((13[0-9])|(14[5,7])|(15[^4,\\D])|(17[0-8])|(18[0-9]))\\d{8}$");
-    }
+    private NumberUtil() {}
 
     public static int genRandomNum(int length) {
         int num = 1;
@@ -15,7 +13,7 @@ public class NumberUtil {
         for (int i = 0; i < length; i++) {
             num = num * 10;
         }
-        return (int) ((random * num));
+        return (int) (random * num);
     }
 
     public static String genOrderNo() {
