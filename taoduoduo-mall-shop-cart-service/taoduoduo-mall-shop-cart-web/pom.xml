@@ -91,6 +91,12 @@
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
         <!-- Sleuth依赖项 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -118,6 +124,12 @@
             <groupId>ltd.goods.taoduoduo.cloud</groupId>
             <artifactId>taoduoduo-mall-goods-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ltd.goods.taoduoduo.cloud</groupId>
+            <artifactId>taoduoduo-mall-goods-web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
