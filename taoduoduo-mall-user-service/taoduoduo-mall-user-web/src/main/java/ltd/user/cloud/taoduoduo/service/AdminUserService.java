@@ -1,11 +1,9 @@
 package ltd.user.cloud.taoduoduo.service;
 
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.exception.UserNotExistException;
 
 public interface AdminUserService  {
 
-    User getUserDetailById(Long loginUserId);
-
-    Boolean lockUsers(Long[] ids, int lockStatus);
+    Boolean lockUsers(Long[] ids, Boolean lockStatus) throws UserNotExistException;
 
 }

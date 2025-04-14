@@ -19,4 +19,9 @@ public class Auth {
     @TableField(value = "user_id")
     private Long userId;
 
+    public Auth(Long userId, String authName) {
+        this.userId = userId;
+        this.authName = authName;
+    }
+
 }

@@ -7,11 +7,9 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
 import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
-import ltd.common.cloud.taoduoduo.util.BeanUtil;
 import ltd.user.cloud.taoduoduo.controller.param.ChangePasswordParam;
 import ltd.user.cloud.taoduoduo.controller.param.RegisterParam;
 import ltd.user.cloud.taoduoduo.controller.param.UserUpdateParam;
-import ltd.user.cloud.taoduoduo.controller.vo.MallUserVO;
 import ltd.user.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.service.MallUserService;
 import ltd.user.cloud.taoduoduo.utils.UserContextUtil;
@@ -41,17 +39,17 @@ public class MallUserController {
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册", notes = "")
-    public Result register(@RequestBody @Valid RegisterParam mallUserRegisterParam) {
+    public Result register(@RequestBody @Valid RegisterParam registerParam) {
 
         String registerResult;
         try {
-            registerResult = mallUserService.register(mallUserRegisterParam.getUsername(), mallUserRegisterParam.getPassword());
+            registerResult = mallUserService.register(registerParam.getUsername(), registerParam.getPassword(), registerParam.getUserType());
         } catch (Exception e) {
-            logger.error("register api,loginName={},error={}", mallUserRegisterParam.getUsername(), e.getStackTrace());
+            logger.error("register api,loginName={},error={}", registerParam.getUsername(), e.getStackTrace());
             return ResultGenerator.genFailResult("注册失败");
         }
 
-        logger.info("register api,loginName={},registerResult={}", mallUserRegisterParam.getUsername(), registerResult);
+        logger.info("register api,loginName={},registerResult={}", registerParam.getUsername(), registerResult);
 
         if (registerResult.equals(ServiceResultEnum.SUCCESS.getResult())) {
             return genSuccessResult();
@@ -62,7 +60,7 @@ public class MallUserController {
     }
 
     @PostMapping("/logout")
-    @ApiOperation(value="登出接口", notes="清除token")
+    @ApiOperation(value="登出接口", notes="在黑名单中添加token")
     public Result logout() {
         Boolean logoutResult = mallUserService.logout();
         logger.info("logout api,loginOutUser={},logoutResult={}", UserContextUtil.getUser().getUserId(), logoutResult);
@@ -76,12 +74,12 @@ public class MallUserController {
 
     @PutMapping("/password")
     @ApiOperation(value = "修改密码接口")
-    public Result passwordUpdate(@RequestBody @Valid ChangePasswordParam adminPasswordParam) {
+    public Result passwordUpdate(@RequestBody @Valid ChangePasswordParam passwordParam) {
         logger.info("adminUser:{}", UserContextUtil.getUser());
 
         boolean updateResult;
         try{
-            updateResult = mallUserService.changePassword(adminPasswordParam.getOldPassword(), adminPasswordParam.getNewPassword());
+            updateResult = mallUserService.changePasswordById(UserContextUtil.getUserId(), passwordParam.getOldPassword(), passwordParam.getNewPassword());
         } catch (Exception e) {
             logger.error("update password error, adminUserId={}, error={}", UserContextUtil.getUser().getUserId(), e.getMessage());
             return ResultGenerator.genFailResult("修改密码失败");
@@ -92,13 +90,13 @@ public class MallUserController {
         return ResultGenerator.genFailResult("DB ERROR");
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ApiOperation(value = "修改用户信息", notes = "")
-    public Result update(@RequestBody @ApiParam("用户信息") UserUpdateParam mallUseUpdateParam) {
+    public Result update(@RequestBody @ApiParam("用户信息") UserUpdateParam updateParam) {
 
         try {
-            Boolean updateResult = mallUserService.updateUserInfo(mallUseUpdateParam);
-            logger.info("update api,loginName={},updateResult={}", mallUseUpdateParam.getUsername(), updateResult);
+            Boolean updateResult = mallUserService.updateUserInfoById(UserContextUtil.getUserId(), updateParam);
+            logger.info("update api,loginName={},updateResult={}", updateParam.getUsername(), updateResult);
 
             if (Boolean.TRUE.equals(updateResult)) {
                 return genSuccessResult();
@@ -106,36 +104,22 @@ public class MallUserController {
                 return ResultGenerator.genFailResult("修改失败");
             }
         } catch (Exception e) {
-            logger.error("update api,loginName={},error={}", mallUseUpdateParam.getUsername(), e.getStackTrace());
+            logger.error("update api,loginName={},error={}", updateParam.getUsername(), e.getStackTrace());
             return ResultGenerator.genFailResult("修改失败");
         }
     }
 
     @GetMapping("/detail")
-    @ApiOperation(value = "获取用户信息", notes = "")
+    @ApiOperation(value = "获取当前登录用户信息", notes = "")
     public Result getUserDetail() {
-        MallUserVO userVO= new MallUserVO();
         User user;
         try{
-            user = mallUserService.getUserDetail();
+            user = mallUserService.getUserDetailById(UserContextUtil.getUserId());
         }catch (Exception e){
-            logger.error("getUserDetail api,loginName={},error={}", UserContextUtil.getUser().getUserId(), e.getStackTrace());
-            return ResultGenerator.genFailResult("获取用户信息失败");
-        }
-        BeanUtil.copyProperties(user, userVO);
-        return ResultGenerator.genSuccessResult(userVO);
-    }
-
-    @GetMapping("/{token}")
-    @ApiOperation(value = "根据token获取用户信息", notes = "")
-    public Result getUserDetailByToken(@PathVariable("token") String mallUserToken) {
-        User user;
-        try{
-            user = mallUserService.getUserDetail();
-        }catch (Exception e){
-            logger.error("getUserDetail api,loginName={},error={}", mallUserToken, e.getStackTrace());
+            logger.error("getUserDetail api,loginName={},error={}", UserContextUtil.getUserId(), e.getStackTrace());
             return ResultGenerator.genFailResult("获取用户信息失败");
         }
         return ResultGenerator.genSuccessResult(user);
     }
+
 }

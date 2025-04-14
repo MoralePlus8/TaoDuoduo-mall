@@ -2,14 +2,11 @@ package ltd.user.cloud.taoduoduo.dto;
 
 import java.io.Serializable;
 
+
 public class MallUserDTO implements Serializable {
     private Long userId;
 
-    private String nickName;
-
-    private String loginName;
-
-    private String introduceSign;
+    private String username;
 
     public Long getUserId() {
         return userId;
@@ -19,27 +16,11 @@ public class MallUserDTO implements Serializable {
         this.userId = userId;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    public String getIntroduceSign() {
-        return introduceSign;
-    }
-
-    public void setIntroduceSign(String introduceSign) {
-        this.introduceSign = introduceSign;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.common.cloud.taoduoduo.exception.*;
-import ltd.common.cloud.taoduoduo.pojo.MallUserToken;
+import ltd.user.cloud.taoduoduo.entity.Auth;
+import ltd.user.cloud.taoduoduo.mapper.AuthMapper;
 import ltd.user.cloud.taoduoduo.mapper.UserMapper;
 import ltd.user.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.controller.param.UserUpdateParam;
@@ -22,6 +23,8 @@ public class MallUserServiceImpl implements MallUserService {
 
     private final UserMapper userMapper;
 
+    private final AuthMapper authMapper;
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     private final PasswordEncoder passwordEncoder;
@@ -30,7 +33,7 @@ public class MallUserServiceImpl implements MallUserService {
     private String tokenPath;
 
     @Override
-    public String register(String username, String password) throws UserNameExistException, DataBaseErrorException {
+    public String register(String username, String password, String userType) throws UserNameExistException, DataBaseErrorException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_name", username);
         if(userMapper.selectOne(queryWrapper) != null) {
@@ -40,51 +43,57 @@ public class MallUserServiceImpl implements MallUserService {
         registerUser.setUsername(username);
         registerUser.setPassword(passwordEncoder.encode(password));
         if(userMapper.insert(registerUser) > 0) {
+            setAuth(registerUser.getUserId(), userType);
             return ServiceResultEnum.SUCCESS.getResult();
         }
         throw new DataBaseErrorException();
     }
 
+    public void setAuth(Long userId, String userType){
+        if(userType.equals("ADMIN")){
+            authMapper.insert(new Auth(userId, "ADMIN"));
+            authMapper.insert(new Auth(userId, "USER"));
+        }
+        else if(userType.equals("USER")){
+            authMapper.insert(new Auth(userId, "USER"));
+        }
+    }
+
     @Override
-    public Boolean changePassword(String originalPassword, String newPassword) throws WrongPasswordException {
-        User admin = userMapper.selectById(UserContextUtil.getUser().getUserId());
-        if(admin != null && passwordEncoder.matches(originalPassword, admin.getPassword())){
-            admin.setPassword(newPassword);
-            return userMapper.updateById(admin) > 0;
+    public Boolean changePasswordById(Long userId, String originalPassword, String newPassword) throws WrongPasswordException {
+        User user = userMapper.selectById(userId);
+        if(user != null && passwordEncoder.matches(originalPassword, user.getPassword())){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            return userMapper.updateById(user) > 0;
         }
         throw new WrongPasswordException();
     }
 
     @Override
-    public Boolean updateUserInfo(UserUpdateParam mallUser) throws UserNotExistException {
-        User user = userMapper.selectById(UserContextUtil.getUser().getUserId());
-        if(user==null){
-            throw new UserNotExistException();
-        }
-
+    public Boolean updateUserInfoById(Long userId, UserUpdateParam mallUser) throws UserNotExistException {
+        User user = new User();
+        user.setUserId(userId);
         BeanUtils.copyProperties(mallUser, user);
         return userMapper.updateById(user) > 0;
     }
 
     @Override
-    public User getUserDetail() throws TokenNotExistException, UserLockedException {
-        MallUserToken mallUserToken = (MallUserToken) redisTemplate.opsForValue().get(tokenPath + UserContextUtil.getUser().getUserId());
-        if(mallUserToken != null) {
-            User user = userMapper.selectById(mallUserToken.getUserId());
-            if(user == null){
-                throw new TokenNotExistException();
-            }
-            if(Boolean.TRUE.equals(user.getLocked())) {
-                throw new UserLockedException();
-            }
-            return user;
+    public User getUserDetailById(Long userId) throws UserNotExistException, UserLockedException {
+
+        User user = userMapper.selectById(userId);
+        if(user == null){
+            throw new UserNotExistException();
         }
-        throw new TokenNotExistException();
+        if(Boolean.TRUE.equals(user.getLocked())) {
+            throw new UserLockedException();
+        }
+        return user;
+
     }
 
     @Override
     public Boolean logout() {
-        redisTemplate.delete(tokenPath+UserContextUtil.getUser().getUserId());
+        redisTemplate.opsForValue().set(tokenPath + UserContextUtil.getUserId(), UserContextUtil.getUserName());
         return true;
     }
 

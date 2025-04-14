@@ -5,8 +5,10 @@ import ltd.user.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.utils.JwtUtil;
 import ltd.user.cloud.taoduoduo.config.filter.JsonLoginFilter;
 import ltd.user.cloud.taoduoduo.config.filter.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final UserDetailsService customUserDetailsService;
+
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    @Value("${redis.user.token.path}")
+    private String tokenPath;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -67,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             claim.put("authorities", userInfo.getAuthorities());
 
             String jwt = JwtUtil.generateToken(authentication.getName(),claim);
+            redisTemplate.delete(tokenPath + userInfo.getUserId());
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write("{\"token\": \"" + jwt + "\"}");
         });

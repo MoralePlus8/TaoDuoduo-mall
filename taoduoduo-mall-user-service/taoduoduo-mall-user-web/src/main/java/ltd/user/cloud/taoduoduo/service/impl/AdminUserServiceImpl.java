@@ -1,12 +1,10 @@
 package ltd.user.cloud.taoduoduo.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import ltd.common.cloud.taoduoduo.exception.UserNotExistException;
 import ltd.user.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.mapper.UserMapper;
 import ltd.user.cloud.taoduoduo.service.AdminUserService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,22 +13,18 @@ public class AdminUserServiceImpl implements AdminUserService{
 
     private final UserMapper userMapper;
 
-    private final RedisTemplate<String, Object> redisTemplate;
-
-    private final PasswordEncoder passwordEncoder;
-
-    @Value("${redis.admin.token.path}")
-    private String tokenPath;
-
     @Override
-    public User getUserDetailById(Long loginUserId) {
-        return userMapper.selectById(loginUserId);
-    }
-
-    @Override
-    public Boolean lockUsers(Long[] ids, int lockStatus) {
-
+    public Boolean lockUsers(Long[] ids, Boolean lockStatus) throws UserNotExistException {
+        for (Long id : ids) {
+            User user = userMapper.selectById(id);
+            if (user != null) {
+                user.setLocked(lockStatus);
+                userMapper.updateById(user);
+            }
+            else throw new UserNotExistException();
+        }
         return ids.length > 0;
 
     }
+
 }

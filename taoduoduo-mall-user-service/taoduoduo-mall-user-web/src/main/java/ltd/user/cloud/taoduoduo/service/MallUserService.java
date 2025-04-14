@@ -6,13 +6,13 @@ import ltd.user.cloud.taoduoduo.entity.User;
 
 public interface MallUserService {
 
-    String register(String username, String password) throws UserNameExistException, DataBaseErrorException;
+    String register(String username, String password, String userType) throws UserNameExistException, DataBaseErrorException;
 
-    Boolean changePassword(String originalPassword, String newPassword) throws WrongPasswordException;
+    Boolean changePasswordById(Long userId, String originalPassword, String newPassword) throws WrongPasswordException;
 
-    Boolean updateUserInfo(UserUpdateParam mallUser) throws UserNotExistException;
+    Boolean updateUserInfoById(Long userId, UserUpdateParam mallUser) throws UserNotExistException;
 
-    User getUserDetail() throws TokenNotExistException, UserLockedException;
+    User getUserDetailById(Long userId) throws UserNotExistException, UserLockedException;
 
     Boolean logout();
 
