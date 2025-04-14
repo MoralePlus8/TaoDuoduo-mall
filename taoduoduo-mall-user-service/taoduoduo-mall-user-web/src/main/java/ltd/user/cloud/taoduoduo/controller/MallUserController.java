@@ -38,7 +38,7 @@ public class MallUserController {
     }
 
     @PostMapping("/register")
-    @ApiOperation(value = "用户注册", notes = "")
+    @ApiOperation(value = "用户注册")
     public Result register(@RequestBody @Valid RegisterParam registerParam) {
 
         String registerResult;
@@ -91,7 +91,7 @@ public class MallUserController {
     }
 
     @PutMapping("/update")
-    @ApiOperation(value = "修改用户信息", notes = "")
+    @ApiOperation(value = "修改用户信息")
     public Result update(@RequestBody @ApiParam("用户信息") UserUpdateParam updateParam) {
 
         try {
@@ -110,7 +110,7 @@ public class MallUserController {
     }
 
     @GetMapping("/detail")
-    @ApiOperation(value = "获取当前登录用户信息", notes = "")
+    @ApiOperation(value = "获取当前登录用户信息")
     public Result getUserDetail() {
         User user;
         try{

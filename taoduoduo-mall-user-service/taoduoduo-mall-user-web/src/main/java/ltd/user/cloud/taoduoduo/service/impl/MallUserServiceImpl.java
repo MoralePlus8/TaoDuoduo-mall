@@ -70,7 +70,7 @@ public class MallUserServiceImpl implements MallUserService {
     }
 
     @Override
-    public Boolean updateUserInfoById(Long userId, UserUpdateParam mallUser) throws UserNotExistException {
+    public Boolean updateUserInfoById(Long userId, UserUpdateParam mallUser) {
         User user = new User();
         user.setUserId(userId);
         BeanUtils.copyProperties(mallUser, user);

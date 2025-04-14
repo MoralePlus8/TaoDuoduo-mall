@@ -10,7 +10,7 @@ public interface MallUserService {
 
     Boolean changePasswordById(Long userId, String originalPassword, String newPassword) throws WrongPasswordException;
 
-    Boolean updateUserInfoById(Long userId, UserUpdateParam mallUser) throws UserNotExistException;
+    Boolean updateUserInfoById(Long userId, UserUpdateParam mallUser);
 
     User getUserDetailById(Long userId) throws UserNotExistException, UserLockedException;
 
