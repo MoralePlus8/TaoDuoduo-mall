@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/goods/mall")
+@RequestMapping("/goods")
 @RequiredArgsConstructor
 @Api(value = "v1", tags = "淘多多商品相关接口")
 public class GoodsController {
@@ -30,7 +30,7 @@ public class GoodsController {
         return null;
     }
 
-    @GetMapping("/deatil/{goodsId}")
+    @GetMapping("/detail/{goodsId}")
     @ApiOperation(value = "商品详情", notes = "根据id查询")
     public Result detail(@PathVariable Long goodsId) {
         logger.info("Get goods detail: {}", goodsId);

@@ -1,7 +1,7 @@
 package ltd.goods.cloud.taoduoduo.service.impl;
 
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
@@ -31,9 +31,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
 
+    private Category selectByLevelAndName(Category category) {
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("category_level", category.getCategoryLevel());
+        queryWrapper.eq("category_name", category.getCategoryName());
+        queryWrapper.eq("is_deleted", 0);
+        return categoryMapper.selectOne(queryWrapper);
+    }
+
     @Override
     public String save(Category category) {
-        Category existingCategory = categoryMapper.findByLevelAndName(category.getCategoryLevel(), category.getCategoryName());
+
+        Category existingCategory = selectByLevelAndName(category);
         if (existingCategory != null) {
             throw new SameCategoryExistException();
         }
@@ -47,19 +56,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public String update(Category category) {
-        Category existingCategory = categoryMapper.findById(category.getCategoryId());
+        Category existingCategory = categoryMapper.selectById(category.getCategoryId());
         if (existingCategory == null) {
             throw new DataNotExistException();
         }
 
         /* 当前存在同名但id不同的分类 */
-        Category duplicateCategory = categoryMapper.findByLevelAndName(category.getCategoryLevel(), category.getCategoryName());
+        Category duplicateCategory = selectByLevelAndName(category);
         if (duplicateCategory != null && !duplicateCategory.getCategoryId().equals(category.getCategoryId())) {
             throw new SameCategoryExistException();
         }
 
         category.setUpdateTime(new Date());
-        if (categoryMapper.update(category) > 0) {
+        if (categoryMapper.updateById(category) > 0) {
             return ServiceResultEnum.SUCCESS.getResult();
         }
 
@@ -68,7 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Long id) {
-        Category category = categoryMapper.findById(id);
+        Category category = categoryMapper.selectById(id);
         if (category == null) {
             throw new DataNotExistException();
         }
@@ -79,22 +88,38 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public PageResult<Category> pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
         PageMethod.startPage(categoryPageQueryDTO.getPageNumber(), categoryPageQueryDTO.getPageSize());
-        Page<Category> page = categoryMapper.pageQuery(categoryPageQueryDTO);
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        if (categoryPageQueryDTO.getCategoryLevel() != null && categoryPageQueryDTO.getCategoryLevel() > 0) {
+            queryWrapper.eq("category_level", categoryPageQueryDTO.getCategoryLevel());
+        }
+        if (categoryPageQueryDTO.getParentId() != null && categoryPageQueryDTO.getParentId() > 0) {
+            queryWrapper.eq("parent_id", categoryPageQueryDTO.getParentId());
+        }
 
-        return new PageResult<>(page.getResult(), page.getTotal(), page.getPageSize(), page.getPageNum());
+        List<Category> page = categoryMapper.selectList(queryWrapper);
+        return new PageResult<>(page, page.size(), categoryPageQueryDTO.getPageSize(), categoryPageQueryDTO.getPageNumber());
     }
 
     @Override
-    public String deleteBatch(BatchIdDTO batchIdDTO) {
-        if (batchIdDTO == null || batchIdDTO.getIds().length == 0) {
+    public void deleteBatch(BatchIdDTO batchIdDTO) {
+        if (batchIdDTO == null || batchIdDTO.getIds().isEmpty()) {
             throw new ParamErrorException();
         }
 
-        if (categoryMapper.deleteBatch(batchIdDTO.getIds()) > 0) {
-            return ServiceResultEnum.SUCCESS.getResult();
-        }
-
+        categoryMapper.deleteBatchIds(batchIdDTO.getIds());
         throw new DataBaseErrorException();
+    }
+
+    private List<Category> findByLevelAndParentIdsAndNumber(List<Long> parentIds, Integer level, Integer number) {
+
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("parent_id", parentIds);
+        queryWrapper.eq("category_level", level);
+        queryWrapper.eq("is_deleted", 0);
+        queryWrapper.orderByDesc("category_rank");
+        queryWrapper.last("LIMIT " + number);
+
+        return categoryMapper.selectList(queryWrapper);
     }
 
     @Override
@@ -102,7 +127,7 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryVO> categoryVOS = new ArrayList<>();
 
         /* 获取一级分类 10 条数据 */
-        List<Category> firstLevelCategories = categoryMapper.findByLevelAndParentIdsAndNumber(
+        List<Category> firstLevelCategories = findByLevelAndParentIdsAndNumber(
                 Collections.singletonList(0L),
                 CategoryLevelEnum.LEVEL_FIRST.getLevel(),
                 10
@@ -112,7 +137,7 @@ public class CategoryServiceImpl implements CategoryService {
                     .map(Category::getCategoryId)
                     .collect(Collectors.toList());
             /* 获取二级分类所有数据 */
-            List<Category> secondLevelCategories = categoryMapper.findByLevelAndParentIdsAndNumber(
+            List<Category> secondLevelCategories = findByLevelAndParentIdsAndNumber(
                     firstLevelCategoryIds,
                     CategoryLevelEnum.LEVEL_SECOND.getLevel(),
                     0
@@ -123,7 +148,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .map(Category::getCategoryId)
                         .collect(Collectors.toList());
                 /* 获取三级分类所有数据 */
-                List<Category> thirdLevelCategories = categoryMapper.findByLevelAndParentIdsAndNumber(
+                List<Category> thirdLevelCategories = findByLevelAndParentIdsAndNumber(
                         secondLevelCategoryIds,
                         CategoryLevelEnum.LEVEL_THIRD.getLevel(),
                         0

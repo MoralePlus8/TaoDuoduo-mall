@@ -20,9 +20,9 @@ public interface GoodsService {
 
     PageResult<Goods> pageQuery(@Valid GoodsPageQueryDTO goodsPageQueryDTO);
 
-    String batchUpdateSellStatus(BatchIdDTO batchIdDTO, Integer sellStatus);
+    void batchUpdateSellStatus(BatchIdDTO batchIdDTO, Boolean sellStatus);
 
-    String updateStock(StockNumUpdateDTO stockNumUpdateDTO);
+    void updateStock(StockNumUpdateDTO stockNumUpdateDTO);
 
     List<Goods> getGoodsByIds(List<Long> goodsIds);
 

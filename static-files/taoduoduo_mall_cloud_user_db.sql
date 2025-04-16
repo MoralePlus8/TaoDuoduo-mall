@@ -3,26 +3,6 @@ CREATE DATABASE /*!32312 IF NOT EXISTS */`taoduoduo_mall_cloud_user_db` /*!40100
 
 USE `taoduoduo_mall_cloud_user_db`;
 
-DROP TABLE IF EXISTS `tb_taoduoduo_mall_admin_user`;
-
-# 创建管理员用户表
-
-CREATE TABLE `tb_taoduoduo_mall_admin_user`
-(
-    `admin_id`     bigint(20)         NOT NULL COMMENT '管理员id',
-    `admin_name`   varchar(50) UNIQUE NOT NULL COMMENT '管理员用户名称',
-    `password_md5` varchar(128)       NOT NULL DEFAULT '' COMMENT '管理员登陆密码',
-    `salt`         varchar(50)        NOT NULL DEFAULT '' COMMENT '管理员密码盐',
-    `locked`       tinyint(1)                  DEFAULT '0' COMMENT '是否锁定 0未锁定 1已锁定无法登陆',
-    `create_time`  datetime           NOT NULL COMMENT '注册时间',
-    `update_time`  datetime           NOT NULL COMMENT '修改时间',
-    PRIMARY KEY (`admin_id`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  ROW_FORMAT = DYNAMIC;
-
-
-
 DROP TABLE IF EXISTS `tb_taoduoduo_mall_user`;
 
 # 创建商城用户表

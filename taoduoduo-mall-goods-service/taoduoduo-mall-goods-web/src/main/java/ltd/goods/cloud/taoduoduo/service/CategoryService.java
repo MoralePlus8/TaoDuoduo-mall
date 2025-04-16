@@ -20,7 +20,7 @@ public interface CategoryService {
 
     PageResult<Category> pageQuery(@Valid CategoryPageQueryDTO categoryPageQueryDTO);
 
-    String deleteBatch(BatchIdDTO batchIdDTO);
+    void deleteBatch(BatchIdDTO batchIdDTO);
 
     List<CategoryVO> getCategoriesForIndex();
 }

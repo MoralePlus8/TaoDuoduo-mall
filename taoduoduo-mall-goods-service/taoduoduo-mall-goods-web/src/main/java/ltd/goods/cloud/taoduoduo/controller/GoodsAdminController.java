@@ -67,7 +67,7 @@ public class GoodsAdminController {
 
         Map<String, Object> goodsDetail = new HashMap<>();
         goodsDetail.put("goods", goods);
-        Category thirdCategory = categoryService.getCategoryById(goods.getGoodsCategoryId());
+        Category thirdCategory = categoryService.getCategoryById(goods.getCategoryId());
         if (thirdCategory != null) {
             goodsDetail.put("thirdCategory", thirdCategory);
             Category secondCategory = categoryService.getCategoryById(thirdCategory.getParentId());
@@ -83,7 +83,7 @@ public class GoodsAdminController {
         return ResultGenerator.genSuccessResult(goodsDetail);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/search")
     @ApiOperation(value = "商品列表", notes = "可根据名称和上架状态筛选")
     /*todo: 将param修改为body，前端请求类型可能需要改 */
     public Result list(@RequestBody @Valid GoodsPageQueryDTO goodsPageQueryDTO) {
@@ -104,7 +104,7 @@ public class GoodsAdminController {
 
     @PutMapping("/updateStatus/{sellStatus}")
     @ApiOperation(value = "批量修改销售状态", notes = "批量修改销售状态")
-    public Result updateStatus(@RequestBody BatchIdDTO batchIdDTO, @PathVariable("sellStatus") Integer sellStatus) {
+    public Result updateStatus(@RequestBody BatchIdDTO batchIdDTO, @PathVariable("sellStatus") Boolean sellStatus) {
         logger.info("Update the status of goods to {}: {}", sellStatus, batchIdDTO);
 
         goodsService.batchUpdateSellStatus(batchIdDTO, sellStatus);

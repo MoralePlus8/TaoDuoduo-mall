@@ -3,11 +3,10 @@ package ltd.common.cloud.taoduoduo.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class PageResult<T> implements Serializable {
+public class PageResult<T> {
 
     @ApiModelProperty("总记录数")
     private long totalCount;
