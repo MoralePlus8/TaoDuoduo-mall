@@ -21,9 +21,7 @@ import ltd.goods.cloud.taoduoduo.vo.SecondLevelCategoryVO;
 import ltd.goods.cloud.taoduoduo.vo.ThirdLevelCategoryVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     private Category selectByLevelAndName(Category category) {
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("category_level", category.getCategoryLevel());
-        queryWrapper.eq("category_name", category.getCategoryName());
-        queryWrapper.eq("is_deleted", 0);
+        queryWrapper.eq(Category.TableAttributes.CATEGORY_NAME, category.getCategoryName());
+        queryWrapper.eq(Category.TableAttributes.CATEGORY_LEVEL, category.getCategoryLevel());
+        queryWrapper.eq(Category.TableAttributes.IS_DELETED, 0);
         return categoryMapper.selectOne(queryWrapper);
     }
 
@@ -55,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String update(Category category) {
+    public void update(Category category) {
         Category existingCategory = categoryMapper.selectById(category.getCategoryId());
         if (existingCategory == null) {
             throw new DataNotExistException();
@@ -69,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         category.setUpdateTime(new Date());
         if (categoryMapper.updateById(category) > 0) {
-            return ServiceResultEnum.SUCCESS.getResult();
+            return;
         }
 
         throw new DataBaseErrorException();
@@ -90,10 +88,10 @@ public class CategoryServiceImpl implements CategoryService {
         PageMethod.startPage(categoryPageQueryDTO.getPageNumber(), categoryPageQueryDTO.getPageSize());
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
         if (categoryPageQueryDTO.getCategoryLevel() != null && categoryPageQueryDTO.getCategoryLevel() > 0) {
-            queryWrapper.eq("category_level", categoryPageQueryDTO.getCategoryLevel());
+            queryWrapper.eq(Category.TableAttributes.CATEGORY_LEVEL, categoryPageQueryDTO.getCategoryLevel());
         }
         if (categoryPageQueryDTO.getParentId() != null && categoryPageQueryDTO.getParentId() > 0) {
-            queryWrapper.eq("parent_id", categoryPageQueryDTO.getParentId());
+            queryWrapper.eq(Category.TableAttributes.PARENT_ID, categoryPageQueryDTO.getParentId());
         }
 
         List<Category> page = categoryMapper.selectList(queryWrapper);
@@ -113,11 +111,11 @@ public class CategoryServiceImpl implements CategoryService {
     private List<Category> findByLevelAndParentIdsAndNumber(List<Long> parentIds, Integer level, Integer number) {
 
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("parent_id", parentIds);
-        queryWrapper.eq("category_level", level);
-        queryWrapper.eq("is_deleted", 0);
-        queryWrapper.orderByDesc("category_rank");
-        queryWrapper.last("LIMIT " + number);
+        queryWrapper.in(Category.TableAttributes.PARENT_ID, parentIds);
+        queryWrapper.eq(Category.TableAttributes.CATEGORY_LEVEL, level);
+        queryWrapper.eq(Category.TableAttributes.IS_DELETED, 0);
+        queryWrapper.orderByDesc(Category.TableAttributes.CATEGORY_RANK);
+        if(number != null) queryWrapper.last("LIMIT " + number);
 
         return categoryMapper.selectList(queryWrapper);
     }
@@ -132,79 +130,41 @@ public class CategoryServiceImpl implements CategoryService {
                 CategoryLevelEnum.LEVEL_FIRST.getLevel(),
                 10
         );
-        if (!firstLevelCategories.isEmpty()) {
-            List<Long> firstLevelCategoryIds = firstLevelCategories.stream()
-                    .map(Category::getCategoryId)
-                    .collect(Collectors.toList());
-            /* 获取二级分类所有数据 */
+
+        for(Category firstLevelCategory : firstLevelCategories) {
+            CategoryVO categoryVO = new CategoryVO();
+            BeanUtils.copyProperties(firstLevelCategory, categoryVO);
+            categoryVOS.add(categoryVO);
+
+            /* 获取当前一级分类下的所有二级分类数据 */
             List<Category> secondLevelCategories = findByLevelAndParentIdsAndNumber(
-                    firstLevelCategoryIds,
+                    Collections.singletonList(firstLevelCategory.getCategoryId()),
                     CategoryLevelEnum.LEVEL_SECOND.getLevel(),
-                    0
+                    null
             );
-            if (!secondLevelCategories.isEmpty()) {
-                List<Long> secondLevelCategoryIds = secondLevelCategories
-                        .stream()
-                        .map(Category::getCategoryId)
-                        .collect(Collectors.toList());
-                /* 获取三级分类所有数据 */
+
+            List<SecondLevelCategoryVO> secondLevelCategoryVOS = new ArrayList<>();
+            for (Category secondLevelCategory : secondLevelCategories) {
+                SecondLevelCategoryVO secondLevelCategoryVO = new SecondLevelCategoryVO();
+                BeanUtils.copyProperties(secondLevelCategory, secondLevelCategoryVO);
+                secondLevelCategoryVOS.add(secondLevelCategoryVO);
+
+                /* 获取当前二级分类下的所有三级分类数据 */
                 List<Category> thirdLevelCategories = findByLevelAndParentIdsAndNumber(
-                        secondLevelCategoryIds,
+                        Collections.singletonList(secondLevelCategory.getCategoryId()),
                         CategoryLevelEnum.LEVEL_THIRD.getLevel(),
-                        0
+                        null
                 );
-                if (!thirdLevelCategories.isEmpty()) {
-                    /* 根据 parentId 将三级分类分组 */
-                    Map<Long, List<Category>> thirdLevelCategoryMap = thirdLevelCategories
-                            .stream()
-                            .collect(Collectors.groupingBy(Category::getParentId));
-                    List<SecondLevelCategoryVO> secondLevelCategoryVOS = new ArrayList<>();
 
-                    /* 处理二级分类 */
-                    for (Category secondLevelCategory : secondLevelCategories) {
-                        SecondLevelCategoryVO secondLevelCategoryVO = new SecondLevelCategoryVO();
-                        BeanUtils.copyProperties(secondLevelCategory, secondLevelCategoryVO);
-
-                        /* 如果该二级分类下有数据则放入 secondLevelCategoryVOS 中*/
-                        if (thirdLevelCategoryMap.containsKey(secondLevelCategory.getCategoryId())) {
-                            List<Category> tempCategories = thirdLevelCategoryMap.get(secondLevelCategory.getCategoryId());
-                            List<ThirdLevelCategoryVO> thirdLevelCategoryVOS = new ArrayList<>();
-
-                            /* 遍历集合，逐个拷贝元素 */
-                            for (Category category : tempCategories) {
-                                ThirdLevelCategoryVO vo = new ThirdLevelCategoryVO();
-                                BeanUtils.copyProperties(category, vo);
-                                thirdLevelCategoryVOS.add(vo);
-                            }
-
-                            secondLevelCategoryVO.setThirdLevelCategoryVOS(thirdLevelCategoryVOS);
-                            secondLevelCategoryVOS.add(secondLevelCategoryVO);
-                        }
-                    }
-                    /* 处理一级分类 */
-                    if (!secondLevelCategoryVOS.isEmpty()) {
-                        /* 根据 parentId 将二级分类分组 */
-                        Map<Long, List<SecondLevelCategoryVO>> secondLevelCategoryVOMap = secondLevelCategoryVOS
-                                .stream()
-                                .collect(Collectors.groupingBy(SecondLevelCategoryVO::getParentId));
-                        for (Category firstCategory : firstLevelCategories) {
-                            CategoryVO categoryVO = new CategoryVO();
-                            BeanUtils.copyProperties(firstCategory, categoryVO);
-
-                            /* 如果该一级分类下有数据则放入 categoryVOS 中*/
-                            if (secondLevelCategoryVOMap.containsKey(firstCategory.getCategoryId())) {
-                                List<SecondLevelCategoryVO> tempCategories = secondLevelCategoryVOMap.get(firstCategory.getCategoryId());
-                                categoryVO.setSecondLevelCategoryVOS(tempCategories);
-                                categoryVOS.add(categoryVO);
-                            }
-                        }
-                    }
+                List<ThirdLevelCategoryVO> thirdLevelCategoryVOS = new ArrayList<>();
+                for (Category thirdLevelCategory : thirdLevelCategories) {
+                    ThirdLevelCategoryVO thirdLevelCategoryVO = new ThirdLevelCategoryVO();
+                    BeanUtils.copyProperties(thirdLevelCategory, thirdLevelCategoryVO);
+                    thirdLevelCategoryVOS.add(thirdLevelCategoryVO);
                 }
+                secondLevelCategoryVO.setThirdLevelCategoryVOS(thirdLevelCategoryVOS);
             }
-        }
-
-        if (categoryVOS.isEmpty()) {
-            throw new DataNotExistException();
+            categoryVO.setSecondLevelCategoryVOS(secondLevelCategoryVOS);
         }
 
         return categoryVOS;

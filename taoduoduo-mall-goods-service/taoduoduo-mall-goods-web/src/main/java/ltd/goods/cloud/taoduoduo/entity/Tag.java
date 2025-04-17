@@ -9,10 +9,17 @@ import lombok.Data;
 @TableName("tb_taoduoduo_mall_tag")
 public class Tag {
 
-    @TableId(value = "tag_id")
+    public static class TableAttributes {
+        private TableAttributes() {}
+        public static final String TAG_ID = "tag_id";
+        public static final String TAG_NAME = "tag_name";
+    }
+
+    @TableId(value = TableAttributes.TAG_ID)
     private Long tagId;
 
-    @TableField(value = "tag_name")
+    @TableField(value = TableAttributes.TAG_NAME)
     private String tagName;
 
 }
+

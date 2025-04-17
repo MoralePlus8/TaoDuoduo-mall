@@ -7,16 +7,23 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("tb_taoduoduo_mall_tag")
+@TableName("tb_taoduoduo_mall_goods_tag")
 public class GoodsTag {
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    public static class TableAttributes {
+        private TableAttributes() {}
+        public static final String ID = "id";
+        public static final String GOODS_ID = "goods_id";
+        public static final String TAG_NAME = "tag_name";
+    }
+
+    @TableId(value = TableAttributes.ID, type = IdType.ASSIGN_ID)
     private Long id;
 
-    @TableField(value = "goods_id")
+    @TableField(value = TableAttributes.GOODS_ID)
     private Long goodsId;
 
-    @TableField(value = "tag_name")
+    @TableField(value = TableAttributes.TAG_NAME)
     private String tagName;
 
     public GoodsTag(Long goodsId, String tagName) {
@@ -24,3 +31,4 @@ public class GoodsTag {
         this.tagName = tagName;
     }
 }
+

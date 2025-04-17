@@ -3,12 +3,8 @@ package ltd.common.cloud.taoduoduo.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
-public class Result implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Result {
 
     @ApiModelProperty("返回码")
     private int resultCode;

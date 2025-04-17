@@ -65,7 +65,7 @@ public class CategoryAdminController {
 
     @GetMapping("/list")
     @ApiOperation(value = "商品分类列表", notes = "根据分类级别和上一级分类的id查询")
-    /*todo: 将param修改为body，前端请求类型可能需要改 */
+
     public Result list(@RequestBody @Valid CategoryPageQueryDTO categoryPageQueryDTO) {
         logger.info("Get the list of categories: {}", categoryPageQueryDTO);
 

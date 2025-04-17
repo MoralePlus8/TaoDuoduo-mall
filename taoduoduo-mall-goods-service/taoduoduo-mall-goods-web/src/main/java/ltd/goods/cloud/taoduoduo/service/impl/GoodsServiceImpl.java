@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.enums.CategoryLevelEnum;
-import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.common.cloud.taoduoduo.exception.*;
 import ltd.goods.cloud.taoduoduo.dto.BatchIdDTO;
 import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryDTO;
@@ -14,17 +13,14 @@ import ltd.goods.cloud.taoduoduo.dto.StockNumUpdateDTO;
 import ltd.goods.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
 import ltd.goods.cloud.taoduoduo.entity.GoodsTag;
+import ltd.goods.cloud.taoduoduo.entity.doc.GoodsDoc;
 import ltd.goods.cloud.taoduoduo.mapper.CategoryMapper;
 import ltd.goods.cloud.taoduoduo.mapper.GoodsMapper;
 import ltd.goods.cloud.taoduoduo.mapper.GoodsTagMapper;
 import ltd.goods.cloud.taoduoduo.service.GoodsService;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -32,6 +28,8 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,27 +45,24 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
 
-    @Value("${redis.tag.path}")
-
     @Override
+    @Transactional
     public String save(Goods goods) {
         Category category = categoryMapper.selectById(goods.getCategoryId());
         /* 分类不存在或者不是第三级分类 */
         if (category == null || category.getCategoryLevel().intValue() != CategoryLevelEnum.LEVEL_THIRD.getLevel()) {
             throw new GoodsCategoryErrorException();
         }
-
+        goodsMapper.insert(goods);
         List<String> tags = goods.getTags();
         for(String tag : tags) {
             goodsTagMapper.insert(new GoodsTag(goods.getGoodsId(), tag));
         }
-        goodsMapper.insert(goods);
-
-        throw new DataBaseErrorException();
+        return goods.getGoodsId().toString();
     }
 
     @Override
-    public String update(Goods goods) {
+    public void update(Goods goods) {
         Category category = categoryMapper.selectById(goods.getCategoryId());
         /* 分类不存在或者不是第三级分类 */
         if (category == null || category.getCategoryLevel().intValue() != CategoryLevelEnum.LEVEL_THIRD.getLevel()) {
@@ -84,7 +79,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
 
         if (goodsMapper.updateById(goods) > 0) {
-            return ServiceResultEnum.SUCCESS.getResult();
+            return;
         }
 
         throw new DataBaseErrorException();
@@ -92,7 +87,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     private void updateTags(Goods goods) {
         QueryWrapper<GoodsTag> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("goods_id", goods.getGoodsId());
+        queryWrapper.eq(GoodsTag.TableAttributes.GOODS_ID, goods.getGoodsId());
         goodsTagMapper.delete(queryWrapper);
         List<String> tags = goods.getTags();
         for(String tag : tags) {
@@ -117,7 +112,7 @@ public class GoodsServiceImpl implements GoodsService {
         if (goods == null) {
             throw new DataNotExistException();
         }
-        if (goods.getStatus()) {
+        if (Boolean.TRUE.equals(goods.getStatus())) {
             throw new GoodsPutDownException();
         }
 
@@ -138,22 +133,26 @@ public class GoodsServiceImpl implements GoodsService {
         String priceOrder = goodsPageQueryDTO.getPriceOrder();
 
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.filter(QueryBuilders.termQuery(GoodsDoc.IndexAttributes.STATUS, false)); // 只查询上架商品
 
         // 关键词搜索
         if (keyword != null && !keyword.isEmpty()) {
-            MultiMatchQueryBuilder keywordQuery = QueryBuilders.multiMatchQuery(keyword, "goods_name", "goods_intro");
+            MultiMatchQueryBuilder keywordQuery = QueryBuilders.multiMatchQuery(
+                    keyword,
+                    GoodsDoc.IndexAttributes.GOODS_NAME,
+                    GoodsDoc.IndexAttributes.GOODS_INTRO);
+
             boolQuery.must(keywordQuery);
         }
 
         // 分类筛选
         if (categoryIds != null && !categoryIds.isEmpty()) {
-            boolQuery.filter(QueryBuilders.termsQuery("category_id_list", categoryIds));
+            boolQuery.filter(QueryBuilders.termsQuery(GoodsDoc.IndexAttributes.CATEGORY_ID_LIST, categoryIds));
         }
-
 
         // 价格范围
         if (minPrice != null || maxPrice != null) {
-            RangeQueryBuilder priceRange = QueryBuilders.rangeQuery("price");
+            RangeQueryBuilder priceRange = QueryBuilders.rangeQuery(GoodsDoc.IndexAttributes.PRICE);
             if (minPrice != null) priceRange.gte(minPrice);
             if (maxPrice != null) priceRange.lte(maxPrice);
             boolQuery.filter(priceRange);
@@ -161,7 +160,7 @@ public class GoodsServiceImpl implements GoodsService {
 
         // 标签筛选（支持多个标签同时满足）
         if (tags != null && !tags.isEmpty()) {
-            boolQuery.filter(QueryBuilders.termsQuery("tags", tags));
+            boolQuery.filter(QueryBuilders.termsQuery(GoodsDoc.IndexAttributes.TAGS, tags));
         }
 
         Pageable pageable = PageRequest.of(page, size);
@@ -203,7 +202,7 @@ public class GoodsServiceImpl implements GoodsService {
 
         batchIdDTO.getIds().forEach(id -> {
             UpdateWrapper<Goods> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq("goods_id", id).set("status", sellStatus);
+            updateWrapper.eq(Goods.TableAttributes.GOODS_ID, id).set(Goods.TableAttributes.STATUS, sellStatus);
             goodsMapper.update(null, updateWrapper);
         });
 

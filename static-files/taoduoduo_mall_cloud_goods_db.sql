@@ -6,7 +6,6 @@ USE `taoduoduo_mall_cloud_goods_db`;
 # 创建商品分类表
 
 DROP TABLE IF EXISTS `tb_taoduoduo_mall_category`;
-
 CREATE TABLE `tb_taoduoduo_mall_category`
 (
     `category_id`    bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '分类id',
@@ -19,132 +18,118 @@ CREATE TABLE `tb_taoduoduo_mall_category`
     `create_user`    bigint(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
     `update_time`    timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     `update_user`    bigint(11) unsigned          DEFAULT '0' COMMENT '修改者id',
+    INDEX `idx_parent_id` (`parent_id`) USING BTREE,
     PRIMARY KEY (`category_id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   ROW_FORMAT = DYNAMIC;
 
-# 新增商品分类数据
 
-INSERT INTO tb_taoduoduo_mall_category (category_level, parent_id, category_name, category_rank, is_deleted,
-                                        create_time, create_user, update_time, update_user)
-VALUES (1, 0, '家电 数码 手机', 100, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '女装 男装 穿搭', 99, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 15, '家电', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 15, '数码', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 15, '手机', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '生活电器', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '厨房电器', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '扫地机器人', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '吸尘器', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '取暖器', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '豆浆机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '暖风机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '加湿器', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '蓝牙音箱', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '烤箱', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '卷发器', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, '空气净化器', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '游戏主机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '数码精选', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '平板电脑', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '苹果 Apple', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '电脑主机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '数码相机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '电玩动漫', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '单反相机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '键盘鼠标', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '无人机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '二手电脑', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 18, '二手手机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, 'iPhone 11', 89, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '荣耀手机', 99, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '华为手机', 98, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '苹果 iPhone', 88, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '华为 Mate 20', 79, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '华为 P30', 97, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '华为 P30 Pro', 0, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '小米手机', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '红米', 0, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, 'OPPO', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '一加', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '小米 MIX', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, 'Reno', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, 'vivo', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 19, '手机以旧换新', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '运动 户外 乐器', 97, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '游戏 动漫 影视', 96, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '家具 家饰 家纺', 98, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '美妆 清洁 宠物', 94, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '工具 装修 建材', 93, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, 'test12', 0, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '玩具 孕产 用品', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '鞋靴 箱包 配件', 91, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 16, '女装', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 16, '男装', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 16, '穿搭', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 61, '家具', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 61, '家饰', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 61, '家纺', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 59, '运动', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 59, '户外', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 59, '乐器', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 67, '外套', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 70, '沙发', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 73, '跑鞋', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 60, '游戏', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 60, '动漫', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 60, '影视', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 79, 'LOL', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 62, '美妆', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 62, '宠物', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 62, '清洁', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '口红', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 63, '工具', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 63, '装修', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 63, '建材', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 87, '转换器', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 64, '珠宝', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 64, '金饰', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 64, '眼镜', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 91, '钻石', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 66, '鞋靴', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 66, '箱包', 9, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 66, '配件', 8, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 95, '休闲鞋', 10, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '气垫', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '美白', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '隔离霜', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '粉底', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '腮红', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '睫毛膏', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '香水', 0, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 83, '面膜', 0, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '2344', 1, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '测试分类', 50, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 15, 'xxx', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 17, 'wer', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '测试分类2', 255, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 111, '测试分类2-1', 0, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '商品类目1', 200, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '商品类目1', 200, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 65, '玩具', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (3, 115, '机器人', 0, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '测试', 10000, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 1, '你好', 100000, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 1, '1', 22222, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 2, '1', 111111, 0, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 1, '222222', 222222, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '测试', 11111111, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (2, 16, '测试', 222222, 1, '2021-03-08 18:56:00', 0, '2021-03-08 18:56:00', 0),
-       (1, 0, '测试分类', 1, 0, '2021-04-15 17:55:55', 0, '2021-04-15 17:55:55', 0);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (1, 1, 0, '测试1级分类', 1, 0, '2025-04-17 04:28:32', 0, '2025-04-17 04:28:32', 0);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (2, 2, 1, '测试2级分类', 2, 0, '2025-04-17 04:28:32', 0, '2025-04-17 04:28:32', 0);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (3, 3, 2, '测式3级分类', 3, 0, '2025-04-17 04:28:32', 0, '2025-04-17 04:28:32', 0);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (4, 1, 0, '电子产品', 100, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (5, 1, 0, '家用电器', 95, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (6, 1, 0, '服装服饰', 90, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (7, 1, 0, '食品饮料', 85, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (8, 1, 0, '家居用品', 80, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (9, 1, 0, '运动户外', 75, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (10, 1, 0, '美妆个护', 70, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (11, 1, 0, '图书音像', 65, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (12, 1, 0, '母婴用品', 60, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (13, 1, 0, '汽车用品', 55, 0, '2025-04-17 05:51:50', 1, '2025-04-17 05:51:50', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (14, 2, 4, '手机通讯', 50, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (15, 2, 4, '电脑办公', 45, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (16, 2, 4, '数码配件', 40, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (17, 2, 4, '智能设备', 35, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (18, 2, 5, '大家电', 50, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (19, 2, 5, '厨房电器', 45, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (20, 2, 5, '生活电器', 40, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (21, 2, 5, '个人护理', 35, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (22, 2, 6, '男装', 50, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (23, 2, 6, '女装', 45, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (24, 2, 6, '童装', 40, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (25, 2, 6, '鞋靴箱包', 35, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (26, 2, 7, '休闲零食', 50, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (27, 2, 7, '酒水饮料', 45, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (28, 2, 7, '生鲜果蔬', 40, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (29, 2, 7, '粮油调味', 35, 0, '2025-04-17 05:51:53', 1, '2025-04-17 05:51:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (30, 3, 14, '智能手机', 30, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (31, 3, 14, '老人手机', 25, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (32, 3, 14, '对讲机', 20, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (33, 3, 15, '笔记本', 30, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (34, 3, 15, '台式机', 25, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (35, 3, 15, '平板电脑', 20, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (36, 3, 18, '电视机', 30, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (37, 3, 18, '冰箱', 25, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (38, 3, 18, '洗衣机', 20, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (39, 3, 22, 'T恤', 30, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (40, 3, 22, '衬衫', 25, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (41, 3, 22, '牛仔裤', 20, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (42, 3, 26, '坚果炒货', 30, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (43, 3, 26, '膨化食品', 25, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (44, 3, 26, '糖果巧克力', 20, 0, '2025-04-17 05:51:54', 1, '2025-04-17 05:51:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (45, 2, 9, '健身器材', 50, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (46, 2, 9, '户外装备', 45, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (47, 2, 9, '运动服饰', 40, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (48, 2, 9, '球类运动', 35, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (49, 2, 10, '护肤', 50, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (50, 2, 10, '彩妆', 45, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (51, 2, 10, '香水', 40, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (52, 2, 10, '个人护理', 35, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (53, 2, 11, '图书', 50, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (54, 2, 11, '音像', 45, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (55, 2, 11, '电子书', 40, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (56, 2, 11, '文具', 35, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (57, 2, 12, '奶粉辅食', 50, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (58, 2, 12, '尿裤湿巾', 45, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (59, 2, 12, '婴童服饰', 40, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (60, 2, 12, '玩具', 35, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (61, 2, 13, '汽车配件', 50, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (62, 2, 13, '汽车美容', 45, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (63, 2, 13, '车载电器', 40, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (64, 2, 13, '汽车装饰', 35, 0, '2025-04-17 05:54:53', 1, '2025-04-17 05:54:53', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (65, 3, 16, '手机壳/保护套', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (66, 3, 16, '充电器/数据线', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (67, 3, 16, '移动电源', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (68, 3, 16, '耳机/耳麦', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (69, 3, 17, '智能手表', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (70, 3, 17, '智能家居', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (71, 3, 17, '智能音箱', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (72, 3, 17, '无人机', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (73, 3, 19, '电饭煲', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (74, 3, 19, '微波炉', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (75, 3, 19, '榨汁机', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (76, 3, 19, '空气炸锅', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (77, 3, 20, '电风扇', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (78, 3, 20, '空气净化器', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (79, 3, 20, '吸尘器', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (80, 3, 20, '加湿器', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (81, 3, 23, '连衣裙', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (82, 3, 23, '半身裙', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (83, 3, 23, '针织衫', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (84, 3, 23, '外套', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (85, 3, 45, '跑步机', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (86, 3, 45, '哑铃', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (87, 3, 45, '瑜伽垫', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (88, 3, 45, '健身车', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (89, 3, 49, '洁面', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (90, 3, 49, '爽肤水', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (91, 3, 49, '面霜', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (92, 3, 49, '面膜', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (93, 3, 57, '婴儿奶粉', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (94, 3, 57, '米粉', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (95, 3, 57, '果泥', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (96, 3, 57, '饼干', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (97, 3, 61, '轮胎', 30, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (98, 3, 61, '机油', 25, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (99, 3, 61, '刹车片', 20, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
+INSERT INTO taoduoduo_mall_cloud_goods_db.tb_taoduoduo_mall_category (category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user) VALUES (100, 3, 61, '滤清器', 15, 0, '2025-04-17 05:54:54', 1, '2025-04-17 05:54:54', 1);
 
-DROP TABLE IF EXISTS `tb_taoduoduo_mall_goods`;
 
 
 
 DROP TABLE IF EXISTS `tb_taoduoduo_mall_tag`;
-
 CREATE TABLE `tb_taoduoduo_mall_tag`
 (
     `tag_name` varchar(50) NOT NULL DEFAULT '' COMMENT '标签名称',
@@ -155,7 +140,7 @@ CREATE TABLE `tb_taoduoduo_mall_tag`
 
 
 # 创建商品表
-
+DROP TABLE IF EXISTS `tb_taoduoduo_mall_goods`;
 CREATE TABLE `tb_taoduoduo_mall_goods`
 (
     `goods_id`        bigint(20) unsigned NOT NULL COMMENT '商品表主键id',
@@ -175,6 +160,7 @@ CREATE TABLE `tb_taoduoduo_mall_goods`
     `update_time`     datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品修改时间',
     `category_id`     bigint(20) unsigned NOT NULL COMMENT '分类id',
     `shop_id`         bigint(20) unsigned NOT NULL COMMENT '所属商店id',
+    INDEX `idx_update_time` (`update_time`) USING BTREE,
     PRIMARY KEY (`goods_id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8

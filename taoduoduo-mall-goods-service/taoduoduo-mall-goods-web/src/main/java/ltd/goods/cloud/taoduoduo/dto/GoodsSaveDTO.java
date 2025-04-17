@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class GoodsSaveDTO {
@@ -20,14 +21,14 @@ public class GoodsSaveDTO {
     @Length(max = 200,message = "商品简介内容过长")
     private String goodsIntro;
 
-    @ApiModelProperty("分类id")
-    @NotNull(message = "分类id不能为空")
-    @Min(value = 1, message = "分类id最低为1")
-    private Long goodsCategoryId;
-
     @ApiModelProperty("商品主图")
     @NotEmpty(message = "商品主图不能为空")
     private String goodsCoverImg;
+
+
+    @ApiModelProperty("商品详情")
+    @NotEmpty(message = "商品详情不能为空")
+    private String goodsDetail;
 
     @ApiModelProperty("originalPrice")
     @NotNull(message = "originalPrice不能为空")
@@ -49,13 +50,19 @@ public class GoodsSaveDTO {
 
     @ApiModelProperty("商品标签")
     @NotEmpty(message = "商品标签不能为空")
-    @Length(max = 16,message = "商品标签内容过长")
-    private String tag;
+    private List<String> tags;
 
-    private Byte goodsSellStatus;
+    @ApiModelProperty("商品状态")
+    @NotNull(message = "商品状态不能为空")
+    private Boolean status;
 
-    @ApiModelProperty("商品详情")
-    @NotEmpty(message = "商品详情不能为空")
-    private String goodsDetailContent;
+    @ApiModelProperty("分类id")
+    @NotNull(message = "分类id不能为空")
+    @Min(value = 1, message = "分类id最低为1")
+    private Long categoryId;
+
+    @ApiModelProperty("店铺id")
+    @NotNull(message = "店铺id不能为空")
+    private Long shopId;
 
 }

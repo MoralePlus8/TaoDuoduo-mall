@@ -4,7 +4,6 @@ package ltd.goods.cloud.taoduoduo.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
 import ltd.goods.cloud.taoduoduo.dto.*;
@@ -81,17 +80,6 @@ public class GoodsAdminController {
         }
 
         return ResultGenerator.genSuccessResult(goodsDetail);
-    }
-
-    @GetMapping("/search")
-    @ApiOperation(value = "商品列表", notes = "可根据名称和上架状态筛选")
-    /*todo: 将param修改为body，前端请求类型可能需要改 */
-    public Result list(@RequestBody @Valid GoodsPageQueryDTO goodsPageQueryDTO) {
-        logger.info("Get the list of goods: {}", goodsPageQueryDTO);
-
-        PageResult<Goods> pageResult = goodsService.pageQuery(goodsPageQueryDTO);
-
-        return ResultGenerator.genSuccessResult(pageResult);
     }
 
     @GetMapping("/listByGoodsIds")

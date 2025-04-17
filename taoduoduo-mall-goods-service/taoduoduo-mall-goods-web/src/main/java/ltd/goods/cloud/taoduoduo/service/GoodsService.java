@@ -14,7 +14,7 @@ public interface GoodsService {
 
     String save(Goods goods);
 
-    String update(Goods goods);
+    void update(Goods goods);
 
     Goods getGoodsById(Long id);
 

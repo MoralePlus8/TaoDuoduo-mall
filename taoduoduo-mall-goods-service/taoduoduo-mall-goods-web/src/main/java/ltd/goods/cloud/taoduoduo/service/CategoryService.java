@@ -14,7 +14,7 @@ public interface CategoryService {
 
     String save(Category category);
 
-    String update(Category category);
+    void update(Category category);
 
     Category getCategoryById(Long id);
 

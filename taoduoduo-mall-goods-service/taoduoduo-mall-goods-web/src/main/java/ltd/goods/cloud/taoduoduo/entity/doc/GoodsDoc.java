@@ -13,41 +13,57 @@ import java.util.List;
 @Document(indexName = "goods_index")
 public class GoodsDoc {
 
+    public static class IndexAttributes {
+        private IndexAttributes() {}
+        public static final String GOODS_ID = "goods_id";
+        public static final String GOODS_NAME = "goods_name";
+        public static final String GOODS_INTRO = "goods_intro";
+        public static final String CATEGORY_LEVEL1_ID = "category_level1_id";
+        public static final String CATEGORY_LEVEL2_ID = "category_level2_id";
+        public static final String CATEGORY_LEVEL3_ID = "category_level3_id";
+        public static final String CATEGORY_ID_LIST = "category_id_list";
+        public static final String PRICE = "price";
+        public static final String SALES_VOLUME = "sales_volume";
+        public static final String TAGS = "tags";
+        public static final String STATUS = "status";
+        public static final String COVER_IMG = "cover_img";
+    }
+
     @Id
-    @Field(name = "goods_id", type = FieldType.Keyword)
+    @Field(name = IndexAttributes.GOODS_ID, type = FieldType.Keyword)
     private Long goodsId;
 
-    @Field(name = "goods_name", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(name = IndexAttributes.GOODS_NAME, type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String goodsName;
 
-    @Field(name = "goods_intro", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(name = IndexAttributes.GOODS_INTRO, type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String goodsIntro;
 
-    @Field(name = "category_level1_id", type = FieldType.Long)
-    private Integer categoryLevel1Id;
+    @Field(name = IndexAttributes.CATEGORY_LEVEL1_ID, type = FieldType.Long)
+    private Long categoryLevel1Id;
 
-    @Field(name = "category_level2_id", type = FieldType.Long)
-    private Integer categoryLevel2Id;
+    @Field(name = IndexAttributes.CATEGORY_LEVEL2_ID, type = FieldType.Long)
+    private Long categoryLevel2Id;
 
-    @Field(name = "category_level3_id", type = FieldType.Long)
-    private Integer categoryLevel3Id;
+    @Field(name = IndexAttributes.CATEGORY_LEVEL3_ID, type = FieldType.Long)
+    private Long categoryLevel3Id;
 
-    @Field(name = "category_id_list", type = FieldType.Long)
-    private List<Integer> categoryIdList;
+    @Field(name = IndexAttributes.CATEGORY_ID_LIST, type = FieldType.Long)
+    private List<Long> categoryIdList;
 
-    @Field(name = "price", type = FieldType.Double, index = false)
+    @Field(name = IndexAttributes.PRICE, type = FieldType.Double, index = false)
     private BigDecimal price;
 
-    @Field(name = "sales_volume", type = FieldType.Integer, index = false)
+    @Field(name = IndexAttributes.SALES_VOLUME, type = FieldType.Integer, index = false)
     private Integer salesVolume;
 
-    @Field(name = "tags", type = FieldType.Keyword)
+    @Field(name = IndexAttributes.TAGS, type = FieldType.Keyword)
     private List<String> tags;
 
-    @Field(name = "status", type = FieldType.Boolean, index = false)
+    @Field(name = IndexAttributes.STATUS, type = FieldType.Boolean, index = false)
     private Boolean status;
 
-    @Field(name = "cover_img", type = FieldType.Keyword, index = false)
+    @Field(name = IndexAttributes.COVER_IMG, type = FieldType.Keyword, index = false)
     private String coverImg;
 
 }

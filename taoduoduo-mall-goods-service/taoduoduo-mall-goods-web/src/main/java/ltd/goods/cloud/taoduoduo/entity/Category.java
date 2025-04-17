@@ -13,36 +13,52 @@ import java.util.Date;
 @TableName("tb_taoduoduo_mall_category")
 public class Category {
 
-    @TableId(value = "category_id")
+    public static class TableAttributes {
+        private TableAttributes(){}
+        public static final String CATEGORY_ID = "category_id";
+        public static final String CATEGORY_LEVEL = "category_level";
+        public static final String PARENT_ID = "parent_id";
+        public static final String CATEGORY_NAME = "category_name";
+        public static final String CATEGORY_RANK = "category_rank";
+        public static final String IS_DELETED = "is_deleted";
+        public static final String CREATE_TIME = "create_time";
+        public static final String CREATE_USER = "create_user";
+        public static final String UPDATE_TIME = "update_time";
+        public static final String UPDATE_USER = "update_user";
+    }
+
+    @TableId(value = TableAttributes.CATEGORY_ID)
     private Long categoryId;
 
-    @TableField(value = "category_level")
+    @TableField(value = TableAttributes.CATEGORY_LEVEL)
     private Byte categoryLevel;
 
-    @TableId(value = "parent_id")
+    @TableField(value = TableAttributes.PARENT_ID)
     private Long parentId;
 
-    @TableField(value = "category_name")
+    @TableField(value = TableAttributes.CATEGORY_NAME)
     private String categoryName;
 
-    @TableField(value = "category_rank")
+    @TableField(value = TableAttributes.CATEGORY_RANK)
     private Integer categoryRank;
 
-    @TableField(value = "is_deleted")
+    @TableField(value = TableAttributes.IS_DELETED)
     private Byte isDeleted;
 
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    @TableField(value = TableAttributes.CREATE_TIME, fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
-    @TableField(value = "create_user")
+    @TableField(value = TableAttributes.CREATE_USER)
     private Integer createUser;
 
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = TableAttributes.UPDATE_TIME, fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
-    @TableField(value = "update_user")
+    @TableField(value = TableAttributes.UPDATE_USER)
     private Integer updateUser;
 
+
 }
+

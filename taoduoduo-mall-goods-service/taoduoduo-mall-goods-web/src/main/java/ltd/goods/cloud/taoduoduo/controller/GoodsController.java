@@ -3,18 +3,19 @@ package ltd.goods.cloud.taoduoduo.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
+import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
 import ltd.goods.cloud.taoduoduo.service.GoodsService;
 import ltd.goods.cloud.taoduoduo.vo.GoodsDetailVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/goods")
@@ -26,9 +27,6 @@ public class GoodsController {
 
     private final GoodsService goodsService;
 
-    public Result search() {
-        return null;
-    }
 
     @GetMapping("/detail/{goodsId}")
     @ApiOperation(value = "商品详情", notes = "根据id查询")
@@ -41,5 +39,15 @@ public class GoodsController {
         goodsDetailVO.setGoodsCarouselList(goods.getGoodsCarousel().split(","));
         
         return ResultGenerator.genSuccessResult(goodsDetailVO);
+    }
+
+    @GetMapping("/search")
+    @ApiOperation(value = "商品列表", notes = "可根据名称和上架状态筛选")
+    public Result list(@RequestBody @Valid GoodsPageQueryDTO goodsPageQueryDTO) {
+        logger.info("Get the list of goods: {}", goodsPageQueryDTO);
+
+        PageResult<Goods> pageResult = goodsService.pageQuery(goodsPageQueryDTO);
+
+        return ResultGenerator.genSuccessResult(pageResult);
     }
 }
