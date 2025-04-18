@@ -2,7 +2,7 @@ package ltd.goods.cloud.taoduoduo.service;
 
 
 import ltd.common.cloud.taoduoduo.dto.PageResult;
-import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
+import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryRequest;
 import ltd.goods.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.vo.CategoryVO;
 
@@ -17,7 +17,7 @@ public interface CategoryService {
 
     Category getCategoryById(Long id);
 
-    PageResult<Category> pageQuery(@Valid CategoryPageQueryDTO categoryPageQueryDTO);
+    PageResult<Category> pageQuery(@Valid CategoryPageQueryRequest categoryPageQueryRequest);
 
     void deleteBatch(List<Long> categoryIds);
 

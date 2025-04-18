@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.enums.CategoryLevelEnum;
 import ltd.common.cloud.taoduoduo.exception.*;
-import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryDTO;
-import ltd.goods.cloud.taoduoduo.dto.StockNumDTO;
-import ltd.goods.cloud.taoduoduo.dto.StockNumUpdateDTO;
+import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryRequest;
+import ltd.goods.cloud.taoduoduo.dto.StockNumRequest;
+import ltd.goods.cloud.taoduoduo.dto.StockNumUpdateRequest;
 import ltd.goods.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
 import ltd.goods.cloud.taoduoduo.entity.GoodsTag;
@@ -27,6 +27,8 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,6 +84,22 @@ public class GoodsServiceImpl implements GoodsService {
         throw new DataBaseErrorException();
     }
 
+    @Override
+    public void addTags(Long goodsId, List<String> tagsName) {
+
+        Goods goods = goodsMapper.selectById(goodsId);
+        if (goods == null) {
+            throw new GoodsNotExistException();
+        }
+        goods.setUpdateTime(new Date());
+        goodsMapper.updateById(goods);
+
+        for(String tag : tagsName) {
+            GoodsTag goodsTag = new GoodsTag(goodsId, tag);
+            goodsTagMapper.insert(goodsTag);
+        }
+    }
+
     private void updateTags(Goods goods) {
         QueryWrapper<GoodsTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(GoodsTag.TableAttributes.GOODS_ID, goods.getGoodsId());
@@ -117,17 +135,17 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public PageResult<GoodsDoc> pageQuery(GoodsPageQueryDTO goodsPageQueryDTO) {
+    public PageResult<GoodsDoc> pageQuery(GoodsPageQueryRequest goodsPageQueryRequest) {
 
-        String keyword = goodsPageQueryDTO.getKeyword();
-        List<Integer> categoryIds = goodsPageQueryDTO.getCategoryIds();
-        Double minPrice = goodsPageQueryDTO.getMinPrice();
-        Double maxPrice = goodsPageQueryDTO.getMaxPrice();
-        List<String> tags = goodsPageQueryDTO.getTags();
-        int page = goodsPageQueryDTO.getPageNumber() - 1; // PageRequest的页码从0开始
-        int size = goodsPageQueryDTO.getPageSize();
-        String sortType = goodsPageQueryDTO.getSortType();
-        String priceOrder = goodsPageQueryDTO.getPriceOrder();
+        String keyword = goodsPageQueryRequest.getKeyword();
+        List<Integer> categoryIds = goodsPageQueryRequest.getCategoryIds();
+        Double minPrice = goodsPageQueryRequest.getMinPrice();
+        Double maxPrice = goodsPageQueryRequest.getMaxPrice();
+        List<String> tags = goodsPageQueryRequest.getTags();
+        int page = goodsPageQueryRequest.getPageNumber() - 1; // PageRequest的页码从0开始
+        int size = goodsPageQueryRequest.getPageSize();
+        String sortType = goodsPageQueryRequest.getSortType();
+        String priceOrder = goodsPageQueryRequest.getPriceOrder();
 
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         boolQuery.filter(QueryBuilders.termQuery(GoodsDoc.IndexAttributes.STATUS, false)); // 只查询上架商品
@@ -207,15 +225,15 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public void updateStock(StockNumUpdateDTO stockNumUpdateDTO) {
-        if (stockNumUpdateDTO == null || stockNumUpdateDTO.getStockNumDTOS() == null || stockNumUpdateDTO.getStockNumDTOS().isEmpty()) {
+    public void updateStock(StockNumUpdateRequest stockNumUpdateRequest) {
+        if (stockNumUpdateRequest == null || stockNumUpdateRequest.getStockNumRequests() == null || stockNumUpdateRequest.getStockNumRequests().isEmpty()) {
             throw new ParamErrorException();
         }
 
-        for (StockNumDTO stockNumDTO : stockNumUpdateDTO.getStockNumDTOS()) {
+        for (StockNumRequest stockNumRequest : stockNumUpdateRequest.getStockNumRequests()) {
             Goods goods = new Goods();
-            goods.setGoodsId(stockNumDTO.getGoodsId());
-            goods.setStockNum(stockNumDTO.getGoodsCount());
+            goods.setGoodsId(stockNumRequest.getGoodsId());
+            goods.setStockNum(stockNumRequest.getGoodsCount());
             goodsMapper.updateById(goods);
         }
 

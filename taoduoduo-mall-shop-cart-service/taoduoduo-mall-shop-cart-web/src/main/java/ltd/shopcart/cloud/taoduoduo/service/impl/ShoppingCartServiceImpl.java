@@ -5,7 +5,7 @@ import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.exception.ShoppingCartItemExistException;
-import ltd.shopcart.cloud.taoduoduo.dto.ShoppingCartItemDTO;
+import ltd.shopcart.cloud.taoduoduo.dto.CartItemRequest;
 import ltd.shopcart.cloud.taoduoduo.entity.ShoppingCartItem;
 import ltd.shopcart.cloud.taoduoduo.mapper.ShoppingCartMapper;
 import ltd.shopcart.cloud.taoduoduo.service.ShoppingCartService;
@@ -34,8 +34,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void save(ShoppingCartItemDTO shoppingCartItemDTO, Long userId) {
-        ShoppingCartItem existingItem = shoppingCartMapper.findByIdAndUserId(shoppingCartItemDTO.getGoodsId(), userId);
+    public void save(CartItemRequest cartItemRequest, Long userId) {
+        ShoppingCartItem existingItem = shoppingCartMapper.findByIdAndUserId(cartItemRequest.getGoodsId(), userId);
         if (existingItem != null) {
             throw new ShoppingCartItemExistException();
         }

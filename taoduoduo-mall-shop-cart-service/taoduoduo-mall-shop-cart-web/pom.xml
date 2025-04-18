@@ -46,6 +46,11 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+
         <!-- Seata 依赖包 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -115,21 +120,9 @@
         </dependency>
 
         <dependency>
-            <groupId>ltd.user.taoduoduo.cloud</groupId>
-            <artifactId>taoduoduo-mall-user-api</artifactId>
+            <groupId>ltd.taoduoduo.cloud</groupId>
+            <artifactId>taoduoduo-mall-common-security</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ltd.goods.taoduoduo.cloud</groupId>
-            <artifactId>taoduoduo-mall-goods-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ltd.goods.taoduoduo.cloud</groupId>
-            <artifactId>taoduoduo-mall-goods-web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>

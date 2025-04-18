@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
 import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
-import ltd.user.cloud.taoduoduo.controller.param.ChangePasswordParam;
-import ltd.user.cloud.taoduoduo.controller.param.RegisterParam;
-import ltd.user.cloud.taoduoduo.controller.param.UserUpdateParam;
+import ltd.user.cloud.taoduoduo.dto.ChangePasswordRequest;
+import ltd.user.cloud.taoduoduo.dto.RegisterRequest;
+import ltd.user.cloud.taoduoduo.dto.UserUpdateRequest;
 import ltd.user.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.service.MallUserService;
-import ltd.user.cloud.taoduoduo.utils.UserContextUtil;
+import ltd.common.cloud.taoduoduo.util.UserContextUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,22 +34,22 @@ public class MallUserController {
 
     @PostMapping("/test")
     public String test() {
-        return "test";
+        return UserContextUtil.getUser().toString();
     }
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
-    public Result register(@RequestBody @Valid RegisterParam registerParam) {
+    public Result register(@RequestBody @Valid RegisterRequest registerRequest) {
 
         String registerResult;
         try {
-            registerResult = mallUserService.register(registerParam.getUsername(), registerParam.getPassword(), registerParam.getUserType());
+            registerResult = mallUserService.register(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getUserType());
         } catch (Exception e) {
-            logger.error("register api,loginName={},error={}", registerParam.getUsername(), e.getStackTrace());
+            logger.error("register api,loginName={},error={}", registerRequest.getUsername(), e.getStackTrace());
             return ResultGenerator.genFailResult("注册失败");
         }
 
-        logger.info("register api,loginName={},registerResult={}", registerParam.getUsername(), registerResult);
+        logger.info("register api,loginName={},registerResult={}", registerRequest.getUsername(), registerResult);
 
         if (registerResult.equals(ServiceResultEnum.SUCCESS.getResult())) {
             return genSuccessResult();
@@ -74,7 +74,7 @@ public class MallUserController {
 
     @PutMapping("/password")
     @ApiOperation(value = "修改密码接口")
-    public Result passwordUpdate(@RequestBody @Valid ChangePasswordParam passwordParam) {
+    public Result passwordUpdate(@RequestBody @Valid ChangePasswordRequest passwordParam) {
         logger.info("adminUser:{}", UserContextUtil.getUser());
 
         boolean updateResult;
@@ -92,7 +92,7 @@ public class MallUserController {
 
     @PutMapping("/update")
     @ApiOperation(value = "修改用户信息")
-    public Result update(@RequestBody @ApiParam("用户信息") UserUpdateParam updateParam) {
+    public Result update(@RequestBody @ApiParam("用户信息") UserUpdateRequest updateParam) {
 
         try {
             Boolean updateResult = mallUserService.updateUserInfoById(UserContextUtil.getUserId(), updateParam);

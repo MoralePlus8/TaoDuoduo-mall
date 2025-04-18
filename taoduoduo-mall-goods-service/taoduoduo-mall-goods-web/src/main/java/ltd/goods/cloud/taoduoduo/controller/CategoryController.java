@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category/")
+@RequestMapping("/goods/category/")
 @RequiredArgsConstructor
 @Api(value = "v1", tags = "淘多多商城分类页面接口")
 public class CategoryController {

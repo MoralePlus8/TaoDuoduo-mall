@@ -8,14 +8,14 @@ import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
 import ltd.user.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.service.AdminUserService;
 import ltd.user.cloud.taoduoduo.service.MallUserService;
-import ltd.user.cloud.taoduoduo.utils.UserContextUtil;
+import ltd.common.cloud.taoduoduo.util.UserContextUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @Api(value = "v1", tags = "管理员操作接口")
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/user/admin")
 @RequiredArgsConstructor
 public class AdminUserController {
 

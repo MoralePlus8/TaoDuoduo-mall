@@ -3,7 +3,7 @@ package ltd.user.cloud.taoduoduo.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import ltd.user.cloud.taoduoduo.entity.Auth;
-import ltd.user.cloud.taoduoduo.entity.SecurityAuthority;
+import ltd.common.cloud.taoduoduo.pojo.SecurityAuthority;
 import ltd.user.cloud.taoduoduo.mapper.AuthMapper;
 import ltd.user.cloud.taoduoduo.mapper.UserMapper;
 import ltd.user.cloud.taoduoduo.entity.User;

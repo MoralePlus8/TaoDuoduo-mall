@@ -6,22 +6,21 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
-import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
-import ltd.goods.cloud.taoduoduo.dto.CategorySaveDTO;
-import ltd.goods.cloud.taoduoduo.dto.CategoryUpdateDTO;
+import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryRequest;
+import ltd.goods.cloud.taoduoduo.dto.CategorySaveRequest;
+import ltd.goods.cloud.taoduoduo.dto.CategoryUpdateRequest;
 import ltd.goods.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/category/admin")
+@RequestMapping("/goods/category/admin")
 @Api(value = "v1", tags = "后台管理系统分类模块接口")
 public class CategoryAdminController {
 
@@ -31,11 +30,11 @@ public class CategoryAdminController {
 
     @PostMapping("/add")
     @ApiOperation(value = "新增分类", notes = "新增分类")
-    public Result save(@RequestBody @Valid CategorySaveDTO categorySaveDTO) {
-        logger.info("Add new category: {}", categorySaveDTO);
+    public Result save(@RequestBody @Valid CategorySaveRequest categorySaveRequest) {
+        logger.info("Add new category: {}", categorySaveRequest);
 
         Category category = new Category();
-        BeanUtils.copyProperties(categorySaveDTO, category);
+        BeanUtils.copyProperties(categorySaveRequest, category);
         categoryService.save(category);
 
         return ResultGenerator.genSuccessResult();
@@ -43,11 +42,11 @@ public class CategoryAdminController {
 
     @PutMapping("/update")
     @ApiOperation(value = "修改分类信息", notes = "修改分类信息")
-    public Result update(@RequestBody @Valid CategoryUpdateDTO categoryUpdateDTO) {
-        logger.info("Update category: {}", categoryUpdateDTO);
+    public Result update(@RequestBody @Valid CategoryUpdateRequest categoryUpdateRequest) {
+        logger.info("Update category: {}", categoryUpdateRequest);
 
         Category category = new Category();
-        BeanUtils.copyProperties(categoryUpdateDTO, category);
+        BeanUtils.copyProperties(categoryUpdateRequest, category);
         categoryService.update(category);
 
         return ResultGenerator.genSuccessResult();
@@ -66,10 +65,10 @@ public class CategoryAdminController {
     @GetMapping("/list")
     @ApiOperation(value = "商品分类列表", notes = "根据分类级别和上一级分类的id查询")
 
-    public Result list(@RequestBody @Valid CategoryPageQueryDTO categoryPageQueryDTO) {
-        logger.info("Get the list of categories: {}", categoryPageQueryDTO);
+    public Result list(@RequestBody @Valid CategoryPageQueryRequest categoryPageQueryRequest) {
+        logger.info("Get the list of categories: {}", categoryPageQueryRequest);
 
-        PageResult<Category> pageResult = categoryService.pageQuery(categoryPageQueryDTO);
+        PageResult<Category> pageResult = categoryService.pageQuery(categoryPageQueryRequest);
 
         return ResultGenerator.genSuccessResult(pageResult);
     }

@@ -1,0 +1,51 @@
+server:
+  port: 29100
+
+spring:
+  application:
+    name: taoduoduo-mall-gateway-admin
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 100.105.28.68
+        group: SEATA_GROUP
+      username: nacos
+      password: nacos
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: user-service-route
+          uri: lb://taoduoduo-mall-user-service
+          order: 1
+          predicates:
+            - Path=/user/**
+
+        - id: goods-service-route
+          uri: lb://taoduoduo-mall-goods-service
+          order: 1
+          predicates:
+            - Path=/goods/**
+
+        - id: recommend-service-route
+          uri: lb://taoduoduo-mall-recommend-service
+          order: 1
+          predicates:
+            - Path=/recommend/**
+
+        - id: order-service-route
+          uri: lb://taoduoduo-mall-order-service
+          order: 1
+          predicates:
+            - Path=/orders/**
+
+        - id: cart-service-route
+          uri: lb://taoduoduo-mall-cart-service
+          order: 1
+          predicates:
+              - Path=/carts/**

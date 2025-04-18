@@ -2,7 +2,7 @@ package ltd.user.cloud.taoduoduo.config.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ltd.common.cloud.taoduoduo.exception.LoginException;
-import ltd.user.cloud.taoduoduo.controller.param.LoginParam;
+import ltd.user.cloud.taoduoduo.dto.LoginRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -17,7 +17,7 @@ public class JsonLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            LoginParam loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginParam.class);
+            LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
             UsernamePasswordAuthenticationToken authRequest =
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
             return this.getAuthenticationManager().authenticate(authRequest);

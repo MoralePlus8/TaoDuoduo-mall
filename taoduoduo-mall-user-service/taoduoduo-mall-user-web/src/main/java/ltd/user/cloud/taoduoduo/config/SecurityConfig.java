@@ -1,10 +1,10 @@
 package ltd.user.cloud.taoduoduo.config;
 
 import lombok.RequiredArgsConstructor;
+import ltd.commonsecurity.cloud.taoduoduo.filter.JwtAuthenticationFilter;
 import ltd.user.cloud.taoduoduo.entity.User;
-import ltd.user.cloud.taoduoduo.utils.JwtUtil;
+import ltd.common.cloud.taoduoduo.util.JwtUtil;
 import ltd.user.cloud.taoduoduo.config.filter.JsonLoginFilter;
-import ltd.user.cloud.taoduoduo.config.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

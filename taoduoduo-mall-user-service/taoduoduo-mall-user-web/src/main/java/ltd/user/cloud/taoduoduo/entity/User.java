@@ -2,13 +2,16 @@ package ltd.user.cloud.taoduoduo.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.EqualsAndHashCode;
+import ltd.common.cloud.taoduoduo.pojo.SecurityAuthority;
+import ltd.common.cloud.taoduoduo.pojo.UserInfo;
 import java.util.Date;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("tb_taoduoduo_mall_user")
-public class User implements UserDetails {
+public class User extends UserInfo {
 
     @TableId(value = "user_id", type = IdType.ASSIGN_ID)
     private Long userId;
@@ -49,24 +52,10 @@ public class User implements UserDetails {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
 
     @Override
     public boolean isAccountNonLocked() {
         return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
 }

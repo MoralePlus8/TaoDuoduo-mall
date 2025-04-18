@@ -33,11 +33,11 @@ public class GoodsAdminController {
 
     @PostMapping("/add")
     @ApiOperation(value = "新增商品", notes = "新增商品")
-    public Result save(@RequestBody @Valid GoodsSaveDTO goodsSaveDTO) {
-        logger.info("Add new goods: {}", goodsSaveDTO);
+    public Result save(@RequestBody @Valid GoodsSaveRequest goodsSaveRequest) {
+        logger.info("Add new goods: {}", goodsSaveRequest);
 
         Goods goods = new Goods();
-        BeanUtils.copyProperties(goodsSaveDTO, goods);
+        BeanUtils.copyProperties(goodsSaveRequest, goods);
         goodsService.save(goods);
 
         return ResultGenerator.genSuccessResult();
@@ -45,12 +45,22 @@ public class GoodsAdminController {
 
     @PutMapping("/update")
     @ApiOperation(value = "修改商品信息", notes = "修改商品信息")
-    public Result update(@RequestBody @Valid GoodsUpdateDTO goodsUpdateDTO) {
-        logger.info("Update goods: {}", goodsUpdateDTO);
+    public Result update(@RequestBody @Valid GoodsUpdateRequest goodsUpdateRequest) {
+        logger.info("Update goods: {}", goodsUpdateRequest);
 
         Goods goods = new Goods();
-        BeanUtils.copyProperties(goodsUpdateDTO, goods);
+        BeanUtils.copyProperties(goodsUpdateRequest, goods);
         goodsService.update(goods);
+
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @PostMapping("/addTags")
+    @ApiOperation(value = "新增商品标签", notes = "新增商品标签")
+    public Result addTags(@RequestBody @Valid GoodsAddTagRequest goodsAddTagRequest) {
+        logger.info("Add new goods tags: {}", goodsAddTagRequest);
+
+        goodsService.addTags(goodsAddTagRequest.getGoodsId(), goodsAddTagRequest.getTagsName());
 
         return ResultGenerator.genSuccessResult();
     }
@@ -100,10 +110,10 @@ public class GoodsAdminController {
 
     @PutMapping("/updateStock")
     @ApiOperation(value = "批量修改库存", notes = "批量修改库存")
-    public Result updateStock(@RequestBody StockNumUpdateDTO stockNumUpdateDTO) {
-        logger.info("Update stock: {}", stockNumUpdateDTO);
+    public Result updateStock(@RequestBody StockNumUpdateRequest stockNumUpdateRequest) {
+        logger.info("Update stock: {}", stockNumUpdateRequest);
 
-        goodsService.updateStock(stockNumUpdateDTO);
+        goodsService.updateStock(stockNumUpdateRequest);
 
         return ResultGenerator.genSuccessResult();
     }

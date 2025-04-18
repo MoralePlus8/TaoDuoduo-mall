@@ -15,7 +15,7 @@ public class ShoppingCartItem {
 
     private Integer goodsCount;
 
-    private Byte isDeleted;
+    private Boolean isDeleted;
 
     private Date createTime;
 

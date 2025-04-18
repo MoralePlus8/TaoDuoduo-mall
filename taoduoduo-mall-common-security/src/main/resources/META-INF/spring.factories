@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ltd.commonsecurity.cloud.taoduoduo.filter.JwtAuthenticationFilter

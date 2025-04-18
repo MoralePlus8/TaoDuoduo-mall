@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
-import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryDTO;
+import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryRequest;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
 import ltd.goods.cloud.taoduoduo.entity.doc.GoodsDoc;
 import ltd.goods.cloud.taoduoduo.service.GoodsService;
@@ -44,10 +44,10 @@ public class GoodsController {
 
     @GetMapping("/search")
     @ApiOperation(value = "商品列表", notes = "可根据名称和上架状态筛选")
-    public Result list(@RequestBody @Valid GoodsPageQueryDTO goodsPageQueryDTO) {
-        logger.info("Get the list of goods: {}", goodsPageQueryDTO);
+    public Result list(@RequestBody @Valid GoodsPageQueryRequest goodsPageQueryRequest) {
+        logger.info("Get the list of goods: {}", goodsPageQueryRequest);
 
-        PageResult<GoodsDoc> pageResult = goodsService.pageQuery(goodsPageQueryDTO);
+        PageResult<GoodsDoc> pageResult = goodsService.pageQuery(goodsPageQueryRequest);
 
         return ResultGenerator.genSuccessResult(pageResult);
     }

@@ -10,7 +10,7 @@ import ltd.common.cloud.taoduoduo.exception.DataBaseErrorException;
 import ltd.common.cloud.taoduoduo.exception.DataNotExistException;
 import ltd.common.cloud.taoduoduo.exception.ParamErrorException;
 import ltd.common.cloud.taoduoduo.exception.SameCategoryExistException;
-import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
+import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryRequest;
 import ltd.goods.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.mapper.CategoryMapper;
 import ltd.goods.cloud.taoduoduo.service.CategoryService;
@@ -96,18 +96,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public PageResult<Category> pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
-        PageMethod.startPage(categoryPageQueryDTO.getPageNumber(), categoryPageQueryDTO.getPageSize());
+    public PageResult<Category> pageQuery(CategoryPageQueryRequest categoryPageQueryRequest) {
+        PageMethod.startPage(categoryPageQueryRequest.getPageNumber(), categoryPageQueryRequest.getPageSize());
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
-        if (categoryPageQueryDTO.getCategoryLevel() != null && categoryPageQueryDTO.getCategoryLevel() > 0) {
-            queryWrapper.eq(Category.TableAttributes.CATEGORY_LEVEL, categoryPageQueryDTO.getCategoryLevel());
+        if (categoryPageQueryRequest.getCategoryLevel() != null && categoryPageQueryRequest.getCategoryLevel() > 0) {
+            queryWrapper.eq(Category.TableAttributes.CATEGORY_LEVEL, categoryPageQueryRequest.getCategoryLevel());
         }
-        if (categoryPageQueryDTO.getParentId() != null && categoryPageQueryDTO.getParentId() > 0) {
-            queryWrapper.eq(Category.TableAttributes.PARENT_ID, categoryPageQueryDTO.getParentId());
+        if (categoryPageQueryRequest.getParentId() != null && categoryPageQueryRequest.getParentId() > 0) {
+            queryWrapper.eq(Category.TableAttributes.PARENT_ID, categoryPageQueryRequest.getParentId());
         }
 
         List<Category> page = categoryMapper.selectList(queryWrapper);
-        return new PageResult<>(page, page.size(), categoryPageQueryDTO.getPageSize(), categoryPageQueryDTO.getPageNumber());
+        return new PageResult<>(page, page.size(), categoryPageQueryRequest.getPageSize(), categoryPageQueryRequest.getPageNumber());
     }
 
     @Override

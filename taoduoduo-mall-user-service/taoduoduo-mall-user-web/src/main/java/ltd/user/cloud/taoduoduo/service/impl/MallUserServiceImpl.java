@@ -8,9 +8,9 @@ import ltd.user.cloud.taoduoduo.entity.Auth;
 import ltd.user.cloud.taoduoduo.mapper.AuthMapper;
 import ltd.user.cloud.taoduoduo.mapper.UserMapper;
 import ltd.user.cloud.taoduoduo.entity.User;
-import ltd.user.cloud.taoduoduo.controller.param.UserUpdateParam;
+import ltd.user.cloud.taoduoduo.dto.UserUpdateRequest;
 import ltd.user.cloud.taoduoduo.service.MallUserService;
-import ltd.user.cloud.taoduoduo.utils.UserContextUtil;
+import ltd.common.cloud.taoduoduo.util.UserContextUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -70,7 +70,7 @@ public class MallUserServiceImpl implements MallUserService {
     }
 
     @Override
-    public Boolean updateUserInfoById(Long userId, UserUpdateParam mallUser) {
+    public Boolean updateUserInfoById(Long userId, UserUpdateRequest mallUser) {
         User user = new User();
         user.setUserId(userId);
         BeanUtils.copyProperties(mallUser, user);
