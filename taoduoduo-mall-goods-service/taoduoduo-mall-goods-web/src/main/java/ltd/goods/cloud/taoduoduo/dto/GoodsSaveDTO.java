@@ -25,7 +25,6 @@ public class GoodsSaveDTO {
     @NotEmpty(message = "商品主图不能为空")
     private String goodsCoverImg;
 
-
     @ApiModelProperty("商品详情")
     @NotEmpty(message = "商品详情不能为空")
     private String goodsDetail;

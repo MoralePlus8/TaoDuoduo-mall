@@ -29,7 +29,7 @@ public class MallUserServiceImpl implements MallUserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${redis.user.token.path}")
+    @Value("${redis.path.user.token}")
     private String tokenPath;
 
     @Override

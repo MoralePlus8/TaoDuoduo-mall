@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @Value("${redis.user.token.path}")
+    @Value("${redis.path.user.token}")
     private String tokenPath;
 
     @Bean

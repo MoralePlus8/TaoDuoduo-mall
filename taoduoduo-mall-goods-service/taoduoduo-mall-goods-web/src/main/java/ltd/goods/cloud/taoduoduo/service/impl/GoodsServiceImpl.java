@@ -1,12 +1,10 @@
 package ltd.goods.cloud.taoduoduo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.enums.CategoryLevelEnum;
 import ltd.common.cloud.taoduoduo.exception.*;
-import ltd.goods.cloud.taoduoduo.dto.BatchIdDTO;
 import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.dto.StockNumDTO;
 import ltd.goods.cloud.taoduoduo.dto.StockNumUpdateDTO;
@@ -29,7 +27,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,7 +117,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public PageResult<Goods> pageQuery(GoodsPageQueryDTO goodsPageQueryDTO) {
+    public PageResult<GoodsDoc> pageQuery(GoodsPageQueryDTO goodsPageQueryDTO) {
 
         String keyword = goodsPageQueryDTO.getKeyword();
         List<Integer> categoryIds = goodsPageQueryDTO.getCategoryIds();
@@ -168,26 +165,26 @@ public class GoodsServiceImpl implements GoodsService {
                 .withQuery(boolQuery)
                 .withPageable(pageable);
 
-        List<Goods> goodsList = sortQueryByNativeSearch(builder, sortType, priceOrder);
+        List<GoodsDoc> goodsList = sortQueryByNativeSearch(builder, sortType, priceOrder);
 
         return new PageResult<>(goodsList, goodsList.size(), size, page + 1);
 
 
     }
 
-    private List<Goods> sortQueryByNativeSearch(NativeSearchQueryBuilder builder, String sortType, String sortOrder){
+    private List<GoodsDoc> sortQueryByNativeSearch(NativeSearchQueryBuilder builder, String sortType, String sortOrder){
 
         if ("sales".equalsIgnoreCase(sortType)) {
-            builder.withSorts(SortBuilders.fieldSort("sales").order(SortOrder.DESC));
+            builder.withSorts(SortBuilders.fieldSort(GoodsDoc.IndexAttributes.SALES_VOLUME).order(SortOrder.DESC));
         } else if ("price".equalsIgnoreCase(sortType)) {
             SortOrder order = "asc".equalsIgnoreCase(sortOrder) ? SortOrder.ASC : SortOrder.DESC;
-            builder.withSorts(SortBuilders.fieldSort("price").order(order));
+            builder.withSorts(SortBuilders.fieldSort(GoodsDoc.IndexAttributes.PRICE).order(order));
         } else {
             // 默认按 _score 排序（综合评分）
             builder.withSorts(SortBuilders.scoreSort().order(SortOrder.DESC));
         }
 
-        SearchHits<Goods> searchHits = elasticsearchRestTemplate.search(builder.build(), Goods.class);
+        SearchHits<GoodsDoc> searchHits = elasticsearchRestTemplate.search(builder.build(), GoodsDoc.class);
         return searchHits.getSearchHits().stream()
                 .map(SearchHit::getContent)
                 .collect(Collectors.toList());
@@ -195,18 +192,18 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public void batchUpdateSellStatus(BatchIdDTO batchIdDTO, Boolean sellStatus) {
-        if (batchIdDTO == null || batchIdDTO.getIds().isEmpty()) {
+    public void batchUpdateSellStatus(List<Long> goodsIds, Boolean sellStatus) {
+        if (goodsIds == null || goodsIds.isEmpty()) {
             throw new ParamErrorException();
         }
 
-        batchIdDTO.getIds().forEach(id -> {
-            UpdateWrapper<Goods> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq(Goods.TableAttributes.GOODS_ID, id).set(Goods.TableAttributes.STATUS, sellStatus);
-            goodsMapper.update(null, updateWrapper);
+        goodsIds.forEach(id -> {
+            Goods goods = new Goods();
+            goods.setGoodsId(id);
+            goods.setStatus(sellStatus);
+            goodsMapper.updateById(goods);
         });
 
-        throw new DataBaseErrorException();
     }
 
     @Override
@@ -222,7 +219,6 @@ public class GoodsServiceImpl implements GoodsService {
             goodsMapper.updateById(goods);
         }
 
-        throw new DataBaseErrorException();
     }
 
     @Override

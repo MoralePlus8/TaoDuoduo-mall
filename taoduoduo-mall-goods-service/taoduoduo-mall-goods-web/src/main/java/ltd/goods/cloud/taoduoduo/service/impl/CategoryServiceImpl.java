@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
-import ltd.common.cloud.taoduoduo.enums.CategoryLevelEnum;
 import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.common.cloud.taoduoduo.exception.DataBaseErrorException;
 import ltd.common.cloud.taoduoduo.exception.DataNotExistException;
 import ltd.common.cloud.taoduoduo.exception.ParamErrorException;
 import ltd.common.cloud.taoduoduo.exception.SameCategoryExistException;
-import ltd.goods.cloud.taoduoduo.dto.BatchIdDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.mapper.CategoryMapper;
@@ -20,14 +18,28 @@ import ltd.goods.cloud.taoduoduo.vo.CategoryVO;
 import ltd.goods.cloud.taoduoduo.vo.SecondLevelCategoryVO;
 import ltd.goods.cloud.taoduoduo.vo.ThirdLevelCategoryVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
+    private final RedisTemplate<String, Object> redisTemplate;
+
     private final CategoryMapper categoryMapper;
+
+    @Value("${redis.path.category.level1}")
+    private String level1Path;
+
+    @Value("${redis.path.category.level2}")
+    private String level2Path;
+
+    @Value("${redis.path.category.level3}")
+    private String level3Path;
 
     private Category selectByLevelAndName(Category category) {
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
@@ -99,72 +111,64 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteBatch(BatchIdDTO batchIdDTO) {
-        if (batchIdDTO == null || batchIdDTO.getIds().isEmpty()) {
+    public void deleteBatch(List<Long> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
             throw new ParamErrorException();
         }
-
-        categoryMapper.deleteBatchIds(batchIdDTO.getIds());
-        throw new DataBaseErrorException();
-    }
-
-    private List<Category> findByLevelAndParentIdsAndNumber(List<Long> parentIds, Integer level, Integer number) {
-
-        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in(Category.TableAttributes.PARENT_ID, parentIds);
-        queryWrapper.eq(Category.TableAttributes.CATEGORY_LEVEL, level);
-        queryWrapper.eq(Category.TableAttributes.IS_DELETED, 0);
-        queryWrapper.orderByDesc(Category.TableAttributes.CATEGORY_RANK);
-        if(number != null) queryWrapper.last("LIMIT " + number);
-
-        return categoryMapper.selectList(queryWrapper);
+        categoryMapper.deleteBatchIds(categoryIds);
     }
 
     @Override
     public List<CategoryVO> getCategoriesForIndex() {
-        List<CategoryVO> categoryVOS = new ArrayList<>();
 
-        /* 获取一级分类 10 条数据 */
-        List<Category> firstLevelCategories = findByLevelAndParentIdsAndNumber(
-                Collections.singletonList(0L),
-                CategoryLevelEnum.LEVEL_FIRST.getLevel(),
-                10
-        );
+        Set<String> level1Keys = redisTemplate.keys(level1Path + "*");
+        Set<String> level2Keys = redisTemplate.keys(level2Path + "*");
+        Set<String> level3Keys = redisTemplate.keys(level3Path + "*");
+        if(level1Keys == null || level2Keys == null || level3Keys == null) {
+            throw new DataNotExistException();
+        }
 
-        for(Category firstLevelCategory : firstLevelCategories) {
+        List<Object> level1List = redisTemplate.opsForValue().multiGet(level1Keys);
+        List<Object> level2List = redisTemplate.opsForValue().multiGet(level2Keys);
+        List<Object> level3List = redisTemplate.opsForValue().multiGet(level3Keys);
+        if(level1List == null || level2List == null || level3List == null) {
+            throw new DataNotExistException();
+        }
+
+        List<CategoryVO> categoryVOS = level1List.stream().map(obj->{
             CategoryVO categoryVO = new CategoryVO();
-            BeanUtils.copyProperties(firstLevelCategory, categoryVO);
-            categoryVOS.add(categoryVO);
+            BeanUtils.copyProperties(obj, categoryVO);
+            return categoryVO;
+        }).collect(Collectors.toList());
 
-            /* 获取当前一级分类下的所有二级分类数据 */
-            List<Category> secondLevelCategories = findByLevelAndParentIdsAndNumber(
-                    Collections.singletonList(firstLevelCategory.getCategoryId()),
-                    CategoryLevelEnum.LEVEL_SECOND.getLevel(),
-                    null
-            );
+        List<SecondLevelCategoryVO> secondLevelCategoryVOS = level2List.stream().map(obj->{
+            SecondLevelCategoryVO secondLevelCategoryVO = new SecondLevelCategoryVO();
+            BeanUtils.copyProperties(obj, secondLevelCategoryVO);
+            return secondLevelCategoryVO;
+        }).collect(Collectors.toList());
 
-            List<SecondLevelCategoryVO> secondLevelCategoryVOS = new ArrayList<>();
-            for (Category secondLevelCategory : secondLevelCategories) {
-                SecondLevelCategoryVO secondLevelCategoryVO = new SecondLevelCategoryVO();
-                BeanUtils.copyProperties(secondLevelCategory, secondLevelCategoryVO);
-                secondLevelCategoryVOS.add(secondLevelCategoryVO);
+        List<ThirdLevelCategoryVO> thirdLevelCategoryVOS = level3List.stream().map(obj->{
+            ThirdLevelCategoryVO thirdLevelCategoryVO = new ThirdLevelCategoryVO();
+            BeanUtils.copyProperties(obj, thirdLevelCategoryVO);
+            return thirdLevelCategoryVO;
+        }).collect(Collectors.toList());
 
-                /* 获取当前二级分类下的所有三级分类数据 */
-                List<Category> thirdLevelCategories = findByLevelAndParentIdsAndNumber(
-                        Collections.singletonList(secondLevelCategory.getCategoryId()),
-                        CategoryLevelEnum.LEVEL_THIRD.getLevel(),
-                        null
-                );
-
-                List<ThirdLevelCategoryVO> thirdLevelCategoryVOS = new ArrayList<>();
-                for (Category thirdLevelCategory : thirdLevelCategories) {
-                    ThirdLevelCategoryVO thirdLevelCategoryVO = new ThirdLevelCategoryVO();
-                    BeanUtils.copyProperties(thirdLevelCategory, thirdLevelCategoryVO);
-                    thirdLevelCategoryVOS.add(thirdLevelCategoryVO);
-                }
-                secondLevelCategoryVO.setThirdLevelCategoryVOS(thirdLevelCategoryVOS);
+        Map<Long, List<ThirdLevelCategoryVO>> thirdLevelMap = thirdLevelCategoryVOS.stream()
+                .collect(Collectors.groupingBy(ThirdLevelCategoryVO::getParentId));
+        for(SecondLevelCategoryVO secondLevelCategoryVO:secondLevelCategoryVOS){
+            List<ThirdLevelCategoryVO> thirdLevelCategories = thirdLevelMap.get(secondLevelCategoryVO.getCategoryId());
+            if(thirdLevelCategories != null){
+                secondLevelCategoryVO.setThirdLevelCategoryVOS(thirdLevelCategories);
             }
-            categoryVO.setSecondLevelCategoryVOS(secondLevelCategoryVOS);
+        }
+
+        Map<Long, List<SecondLevelCategoryVO>> secondLevelMap = secondLevelCategoryVOS.stream()
+                .collect(Collectors.groupingBy(SecondLevelCategoryVO::getParentId));
+        for(CategoryVO categoryVO:categoryVOS){
+            List<SecondLevelCategoryVO> secondLevelCategories = secondLevelMap.get(categoryVO.getCategoryId());
+            if(secondLevelCategories != null){
+                categoryVO.setSecondLevelCategoryVOS(secondLevelCategories);
+            }
         }
 
         return categoryVOS;

@@ -1,6 +1,5 @@
 package ltd.goods.cloud.taoduoduo.controller;
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +82,7 @@ public class GoodsAdminController {
 
     @GetMapping("/listByGoodsIds")
     @ApiOperation(value = "根据ids查询商品列表", notes = "根据ids查询")
-    public Result listByIds(@RequestParam("goodsIds") List<Long> goodsIds) {
+    public Result listByIds(@RequestBody List<Long> goodsIds) {
         List<Goods> goodsList = goodsService.getGoodsByIds(goodsIds);
 
         return ResultGenerator.genSuccessResult(goodsList);
@@ -92,10 +90,10 @@ public class GoodsAdminController {
 
     @PutMapping("/updateStatus/{sellStatus}")
     @ApiOperation(value = "批量修改销售状态", notes = "批量修改销售状态")
-    public Result updateStatus(@RequestBody BatchIdDTO batchIdDTO, @PathVariable("sellStatus") Boolean sellStatus) {
-        logger.info("Update the status of goods to {}: {}", sellStatus, batchIdDTO);
+    public Result updateStatus(@RequestBody List<Long> goodsIds, @PathVariable("sellStatus") Boolean sellStatus) {
+        logger.info("Update the status of goods to {}: {}", sellStatus, goodsIds);
 
-        goodsService.batchUpdateSellStatus(batchIdDTO, sellStatus);
+        goodsService.batchUpdateSellStatus(goodsIds, sellStatus);
 
         return ResultGenerator.genSuccessResult();
     }

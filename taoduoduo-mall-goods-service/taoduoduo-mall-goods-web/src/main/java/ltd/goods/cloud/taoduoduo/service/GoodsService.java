@@ -2,10 +2,10 @@ package ltd.goods.cloud.taoduoduo.service;
 
 
 import ltd.common.cloud.taoduoduo.dto.PageResult;
-import ltd.goods.cloud.taoduoduo.dto.BatchIdDTO;
 import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.dto.StockNumUpdateDTO;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
+import ltd.goods.cloud.taoduoduo.entity.doc.GoodsDoc;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,9 +18,9 @@ public interface GoodsService {
 
     Goods getGoodsById(Long id);
 
-    PageResult<Goods> pageQuery(@Valid GoodsPageQueryDTO goodsPageQueryDTO);
+    PageResult<GoodsDoc> pageQuery(@Valid GoodsPageQueryDTO goodsPageQueryDTO);
 
-    void batchUpdateSellStatus(BatchIdDTO batchIdDTO, Boolean sellStatus);
+    void batchUpdateSellStatus(List<Long> goodIds, Boolean sellStatus);
 
     void updateStock(StockNumUpdateDTO stockNumUpdateDTO);
 

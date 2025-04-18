@@ -22,7 +22,7 @@ public class GoodsDoc {
         public static final String CATEGORY_LEVEL2_ID = "category_level2_id";
         public static final String CATEGORY_LEVEL3_ID = "category_level3_id";
         public static final String CATEGORY_ID_LIST = "category_id_list";
-        public static final String PRICE = "price";
+        public static final String PRICE = "selling_price";
         public static final String SALES_VOLUME = "sales_volume";
         public static final String TAGS = "tags";
         public static final String STATUS = "status";
@@ -39,28 +39,28 @@ public class GoodsDoc {
     @Field(name = IndexAttributes.GOODS_INTRO, type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String goodsIntro;
 
-    @Field(name = IndexAttributes.CATEGORY_LEVEL1_ID, type = FieldType.Long)
+    @Field(name = IndexAttributes.CATEGORY_LEVEL1_ID, type = FieldType.Long, index = false)
     private Long categoryLevel1Id;
 
-    @Field(name = IndexAttributes.CATEGORY_LEVEL2_ID, type = FieldType.Long)
+    @Field(name = IndexAttributes.CATEGORY_LEVEL2_ID, type = FieldType.Long, index = false)
     private Long categoryLevel2Id;
 
-    @Field(name = IndexAttributes.CATEGORY_LEVEL3_ID, type = FieldType.Long)
+    @Field(name = IndexAttributes.CATEGORY_LEVEL3_ID, type = FieldType.Long, index = false)
     private Long categoryLevel3Id;
 
     @Field(name = IndexAttributes.CATEGORY_ID_LIST, type = FieldType.Long)
     private List<Long> categoryIdList;
 
-    @Field(name = IndexAttributes.PRICE, type = FieldType.Double, index = false)
-    private BigDecimal price;
+    @Field(name = IndexAttributes.PRICE, type = FieldType.Double)
+    private BigDecimal sellingPrice;
 
-    @Field(name = IndexAttributes.SALES_VOLUME, type = FieldType.Integer, index = false)
+    @Field(name = IndexAttributes.SALES_VOLUME, type = FieldType.Integer)
     private Integer salesVolume;
 
     @Field(name = IndexAttributes.TAGS, type = FieldType.Keyword)
     private List<String> tags;
 
-    @Field(name = IndexAttributes.STATUS, type = FieldType.Boolean, index = false)
+    @Field(name = IndexAttributes.STATUS, type = FieldType.Boolean)
     private Boolean status;
 
     @Field(name = IndexAttributes.COVER_IMG, type = FieldType.Keyword, index = false)

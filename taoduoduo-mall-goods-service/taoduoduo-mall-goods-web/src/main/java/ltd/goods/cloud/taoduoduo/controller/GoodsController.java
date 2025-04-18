@@ -8,6 +8,7 @@ import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
 import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.entity.Goods;
+import ltd.goods.cloud.taoduoduo.entity.doc.GoodsDoc;
 import ltd.goods.cloud.taoduoduo.service.GoodsService;
 import ltd.goods.cloud.taoduoduo.vo.GoodsDetailVO;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class GoodsController {
     public Result list(@RequestBody @Valid GoodsPageQueryDTO goodsPageQueryDTO) {
         logger.info("Get the list of goods: {}", goodsPageQueryDTO);
 
-        PageResult<Goods> pageResult = goodsService.pageQuery(goodsPageQueryDTO);
+        PageResult<GoodsDoc> pageResult = goodsService.pageQuery(goodsPageQueryDTO);
 
         return ResultGenerator.genSuccessResult(pageResult);
     }

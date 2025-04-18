@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
-import ltd.goods.cloud.taoduoduo.dto.BatchIdDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategorySaveDTO;
 import ltd.goods.cloud.taoduoduo.dto.CategoryUpdateDTO;
@@ -18,10 +17,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/categories/admin")
+@RequestMapping("/category/admin")
 @Api(value = "v1", tags = "后台管理系统分类模块接口")
 public class CategoryAdminController {
 
@@ -76,10 +76,10 @@ public class CategoryAdminController {
 
     @DeleteMapping("/batchDelete")
     @ApiOperation(value = "批量删除分类信息", notes = "批量删除分类信息")
-    public Result delete(@RequestBody BatchIdDTO batchIdDTO) {
-        logger.info("Delete categories: {}", batchIdDTO);
+    public Result delete(@RequestBody List<Long> categoryIds) {
+        logger.info("Delete categories: {}", categoryIds);
 
-        categoryService.deleteBatch(batchIdDTO);
+        categoryService.deleteBatch(categoryIds);
 
         return ResultGenerator.genSuccessResult();
     }
