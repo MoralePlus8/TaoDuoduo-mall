@@ -52,19 +52,6 @@ pipeline {
 //             }
 //         }
     }
-
-    post {
-        always {
-            // 清理工作空间
-            cleanWs()
-        }
-        failure {
-            // 构建失败通知
-            emailext body: '构建失败，请检查: ${BUILD_URL}',
-                    subject: '构建失败: ${JOB_NAME}',
-                    to: 'team@example.com'
-        }
-    }
 }
 
 // 获取所有微服务模块
