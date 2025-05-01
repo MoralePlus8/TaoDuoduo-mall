@@ -100,7 +100,6 @@ def deployToLocal(String serviceName) {
     // 复制jar文件到部署目录
     sh """
         cp ${sourceJar} ${DEPLOY_DIR}/${targetJar}
-        chmod 755 ${DEPLOY_DIR}/${targetJar}
     """
 
     echo "服务 ${serviceName} 已部署到 ${DEPLOY_DIR}/${targetJar}"
