@@ -28,17 +28,19 @@ pipeline {
         stage('Deploy to Local') {
             steps {
                 script {
-                    // 获取所有微服务模块
-                    def services = getMicroserviceModules()
-
                     // 确保部署目录存在
                     sh "mkdir -p ${DEPLOY_DIR}"
                     sh "chown -R jenkins:jenkins ${DEPLOY_DIR}"
 
-                    // 部署每个服务
-                    services.each { service ->
-                        deployToLocal(service)
-                    }
+
+                    cp "taoduoduo-mall-user-service/taoduoduo-mall-user-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-user-service.jar"
+                    cp "taoduoduo-mall-goods-service/taoduoduo-mall-goods-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-goods-service.jar"
+                    cp "taoduoduo-mall-order-service/taoduoduo-mall-order-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-order-service.jar"
+                    cp "taoduoduo-mall-recommend-service/taoduoduo-mall-recommend-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-recommend-service.jar"
+                    cp "taoduoduo-mall-shop-cart-service/taoduoduo-mall-shop-cart-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-shop-cart-service.jar"
+                    cp "taoduoduo-mall-gateway-admin/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-gateway-admin.jar"
+
+
                 }
             }
         }
@@ -71,7 +73,7 @@ def getMicroserviceModules() {
         if (endIndex == -1) break
 
         def module = pomContent.substring(index + moduleStart.length(), endIndex).trim()
-        if (fileExists("${module}/src/main/resources/application.yaml") ||
+        if (fileExists("${module}/${}/src/main/resources/application.properties") ||
             fileExists("${module}/src/main/resources/application.properties")) {
             sh "echo \"Found module: ${module}\""
             modules.add(module)
