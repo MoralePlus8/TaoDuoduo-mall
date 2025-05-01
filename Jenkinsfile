@@ -12,8 +12,8 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/your-account/your-repo.git',
-                credentialsId: 'your-github-credentials'
+                url: 'https://github.com/MoralePlus8/TaoDuoduo-mall',
+                credentialsId: 'fc7870fc-6e71-424e-957e-6e11b1ef8f92'
             }
         }
 
