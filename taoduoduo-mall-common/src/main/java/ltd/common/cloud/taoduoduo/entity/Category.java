@@ -1,4 +1,4 @@
-package ltd.goods.cloud.taoduoduo.entity;
+package ltd.common.cloud.taoduoduo.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

@@ -2,7 +2,7 @@ package ltd.user.cloud.taoduoduo.config;
 
 import lombok.RequiredArgsConstructor;
 import ltd.commonsecurity.cloud.taoduoduo.filter.JwtAuthenticationFilter;
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.entity.User;
 import ltd.common.cloud.taoduoduo.util.JwtUtil;
 import ltd.user.cloud.taoduoduo.config.filter.JsonLoginFilter;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,10 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/**/login", "/**/register").permitAll()
+                .antMatchers("/**/login", "/**/register", "/swagger-ui/**").permitAll()
                 .antMatchers("/**/user/**").hasAuthority("USER")
                 .antMatchers("/**/admin/**").hasAuthority("ADMIN")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         JsonLoginFilter jsonLoginFilter = new JsonLoginFilter();
         jsonLoginFilter.setFilterProcessesUrl("/user/login");

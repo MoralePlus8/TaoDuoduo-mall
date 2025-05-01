@@ -2,7 +2,7 @@ package ltd.user.cloud.taoduoduo.service;
 
 import ltd.common.cloud.taoduoduo.exception.*;
 import ltd.user.cloud.taoduoduo.dto.UserUpdateRequest;
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.entity.User;
 
 public interface MallUserService {
 

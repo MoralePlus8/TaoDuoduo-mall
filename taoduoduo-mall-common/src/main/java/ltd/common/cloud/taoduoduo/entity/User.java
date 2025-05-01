@@ -1,4 +1,4 @@
-package ltd.user.cloud.taoduoduo.entity;
+package ltd.common.cloud.taoduoduo.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.service.AdminUserService;
 import ltd.user.cloud.taoduoduo.service.MallUserService;
 import ltd.common.cloud.taoduoduo.util.UserContextUtil;

@@ -1,15 +1,22 @@
 package ltd.shopcart.cloud.taoduoduo.service.impl;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
-import ltd.common.cloud.taoduoduo.exception.ShoppingCartItemExistException;
+import ltd.common.cloud.taoduoduo.dto.Result;
+import ltd.common.cloud.taoduoduo.entity.Goods;
+import ltd.common.cloud.taoduoduo.exception.*;
+import ltd.common.cloud.taoduoduo.util.UserContextUtil;
+import ltd.goods.cloud.taoduoduo.openfeign.GoodsServiceFeign;
 import ltd.shopcart.cloud.taoduoduo.dto.CartItemRequest;
-import ltd.shopcart.cloud.taoduoduo.entity.ShoppingCartItem;
+import ltd.common.cloud.taoduoduo.entity.ShoppingCartItem;
 import ltd.shopcart.cloud.taoduoduo.mapper.ShoppingCartMapper;
 import ltd.shopcart.cloud.taoduoduo.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +26,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartMapper shoppingCartMapper;
 
+    private final GoodsServiceFeign goodsService;
 
 
     @Override
@@ -27,19 +35,140 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             pageNumber = 1;
         }
 
-        PageMethod.startPage(pageNumber, PAGE_SIZE);
-        Page<ShoppingCartItem> page = shoppingCartMapper.pageQuery(pageNumber, PAGE_SIZE);
+        QueryWrapper<ShoppingCartItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.USER_ID, UserContextUtil.getUserId());
 
-        return new PageResult<>(page.getResult(), page.getTotal(), page.getPageSize(), page.getPageNum());
+        PageMethod.startPage(pageNumber, PAGE_SIZE);
+        List<ShoppingCartItem> page = shoppingCartMapper.selectList(queryWrapper);
+
+        return new PageResult<>(page, page.size(), PAGE_SIZE, pageNumber);
     }
 
     @Override
-    public void save(CartItemRequest cartItemRequest, Long userId) {
-        ShoppingCartItem existingItem = shoppingCartMapper.findByIdAndUserId(cartItemRequest.getGoodsId(), userId);
+    public void save(CartItemRequest cartItemRequest) {
+
+        if(cartItemRequest.getGoodsCount() < 1){
+            throw new OutOfStockException();
+        }
+
+        QueryWrapper<ShoppingCartItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.USER_ID, UserContextUtil.getUserId());
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.GOODS_ID, cartItemRequest.getGoodsId());
+
+        ShoppingCartItem existingItem = shoppingCartMapper.selectOne(queryWrapper);
         if (existingItem != null) {
             throw new ShoppingCartItemExistException();
         }
 
+        Result goodsDetail = goodsService.getGoodsDetail(cartItemRequest.getGoodsId());
+        if (goodsDetail == null || goodsDetail.getResultCode() != 200) {
+            throw new DataNotExistException();
+        }
 
+        Goods goods = (Goods) goodsDetail.getData();
+        if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
+            throw new OutOfStockException();
+        }
+
+
+        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+        shoppingCartItem.setGoodsId(cartItemRequest.getGoodsId());
+        shoppingCartItem.setUserId(UserContextUtil.getUserId());
+        shoppingCartMapper.insert(shoppingCartItem);
+
+    }
+
+
+
+
+    @Override
+    public void update(CartItemRequest cartItemRequest) {
+
+        if(cartItemRequest.getGoodsCount() < 1){
+            throw new OutOfStockException();
+        }
+
+        QueryWrapper<ShoppingCartItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.USER_ID, UserContextUtil.getUserId());
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.GOODS_ID, cartItemRequest.getGoodsId());
+
+        ShoppingCartItem existingItem = shoppingCartMapper.selectOne(queryWrapper);
+        if (existingItem == null) {
+            throw new DataNotExistException();
+        }
+
+        Result goodsDetail = goodsService.getGoodsDetail(cartItemRequest.getGoodsId());
+        if (goodsDetail == null || goodsDetail.getResultCode() != 200) {
+            throw new DataNotExistException();
+        }
+        Goods goods = (Goods) goodsDetail.getData();
+        if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
+            throw new OutOfStockException();
+        }
+
+        existingItem.setGoodsCount(cartItemRequest.getGoodsCount());
+        existingItem.setUpdateTime(new Date());
+        shoppingCartMapper.updateById(existingItem);
+    }
+
+    @Override
+    public ShoppingCartItem getCartItemById(Long cartItemId) {
+
+        ShoppingCartItem shoppingCartItem = shoppingCartMapper.selectById(cartItemId);
+        if (shoppingCartItem == null) {
+            throw new DataNotExistException();
+        }
+
+        return shoppingCartItem;
+    }
+
+    @Override
+    public void deleteById(Long cartItemId) {
+        if(!Objects.equals(UserContextUtil.getUserId(), cartItemId)){
+            throw new AccessDeniedException();
+        }
+        if(shoppingCartMapper.deleteById(cartItemId)<1){
+            throw new DataNotExistException();
+        }
+    }
+
+    @Override
+    public void deleteByIds(List<Long> cartItemIds) {
+        if(cartItemIds == null || cartItemIds.isEmpty()){
+            throw new DataNotExistException();
+        }
+        QueryWrapper<ShoppingCartItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.USER_ID, UserContextUtil.getUserId());
+        queryWrapper.in(ShoppingCartItem.TableAttributes.CART_ITEM_ID, cartItemIds);
+        int cnt = shoppingCartMapper.delete(queryWrapper);
+        if(cnt < 1 || cnt != cartItemIds.size()){
+            throw new DataBaseErrorException();
+        }
+    }
+
+    @Override
+    public List<ShoppingCartItem> getMyCartItems() {
+        QueryWrapper<ShoppingCartItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.USER_ID, UserContextUtil.getUserId());
+        return shoppingCartMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<ShoppingCartItem> getCartItemsForSettle(List<Long> cartItemIds) {
+        QueryWrapper<ShoppingCartItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ShoppingCartItem.TableAttributes.USER_ID, UserContextUtil.getUserId());
+        queryWrapper.in(ShoppingCartItem.TableAttributes.CART_ITEM_ID, cartItemIds);
+        List<ShoppingCartItem> shoppingCartItems = shoppingCartMapper.selectList(queryWrapper);
+        if(cartItemIds.size() != shoppingCartItems.size()){
+            throw new DataBaseErrorException();
+        }
+        return shoppingCartItems;
+    }
+
+    @Override
+    public List<ShoppingCartItem> getCartItemsByIds(List<Long> cartItemIds) {
+        QueryWrapper<ShoppingCartItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in(ShoppingCartItem.TableAttributes.CART_ITEM_ID, cartItemIds);
+        return shoppingCartMapper.selectList(queryWrapper);
     }
 }

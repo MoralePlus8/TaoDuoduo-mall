@@ -2,10 +2,10 @@ package ltd.goods.cloud.taoduoduo.task;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
-import ltd.goods.cloud.taoduoduo.entity.Category;
-import ltd.goods.cloud.taoduoduo.entity.Goods;
-import ltd.goods.cloud.taoduoduo.entity.GoodsTag;
-import ltd.goods.cloud.taoduoduo.entity.doc.GoodsDoc;
+import ltd.common.cloud.taoduoduo.entity.Category;
+import ltd.common.cloud.taoduoduo.entity.Goods;
+import ltd.common.cloud.taoduoduo.entity.GoodsTag;
+import ltd.goods.cloud.taoduoduo.doc.GoodsDoc;
 import ltd.goods.cloud.taoduoduo.mapper.CategoryMapper;
 import ltd.goods.cloud.taoduoduo.mapper.GoodsMapper;
 import ltd.goods.cloud.taoduoduo.mapper.GoodsTagMapper;

@@ -2,7 +2,7 @@ package ltd.goods.cloud.taoduoduo.task;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
-import ltd.goods.cloud.taoduoduo.entity.Category;
+import ltd.common.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

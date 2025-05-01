@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TaoduoduoMallRecommendWebApplication {
+public class TaoduoduoMallRecommendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TaoduoduoMallRecommendWebApplication.class, args);
+        SpringApplication.run(TaoduoduoMallRecommendApplication.class, args);
     }
 
 }

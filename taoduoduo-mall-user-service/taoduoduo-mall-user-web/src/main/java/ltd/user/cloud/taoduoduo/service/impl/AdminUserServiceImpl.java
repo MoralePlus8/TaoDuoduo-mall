@@ -2,7 +2,7 @@ package ltd.user.cloud.taoduoduo.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.exception.UserNotExistException;
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.mapper.UserMapper;
 import ltd.user.cloud.taoduoduo.service.AdminUserService;
 import org.springframework.stereotype.Service;

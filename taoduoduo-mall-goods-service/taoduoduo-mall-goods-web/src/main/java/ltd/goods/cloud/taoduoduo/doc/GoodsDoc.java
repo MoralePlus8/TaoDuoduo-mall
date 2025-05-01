@@ -1,4 +1,4 @@
-package ltd.goods.cloud.taoduoduo.entity.doc;
+package ltd.goods.cloud.taoduoduo.doc;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

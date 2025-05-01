@@ -49,3 +49,38 @@ spring:
           order: 1
           predicates:
               - Path=/carts/**
+
+        - id: user-service-swagger
+          uri: lb://taoduoduo-mall-user-service
+          predicates:
+            - Path=/swagger/user/**
+          filters:
+            - StripPrefix=2
+
+        - id: goods-service-swagger
+          uri: lb://taoduoduo-mall-goods-service
+          predicates:
+            - Path=/swagger/goods/**
+          filters:
+            - StripPrefix=2
+
+        - id: recommend-service-swagger
+          uri: lb://taoduoduo-mall-recommend-service
+          predicates:
+            - Path=/swagger/recommend/**
+          filters:
+            - StripPrefix=2
+
+        - id: order-service-swagger
+          uri: lb://taoduoduo-mall-order-service
+          predicates:
+            - Path=/swagger/order/**
+          filters:
+            - StripPrefix=2
+
+        - id: cart-service-swagger
+          uri: lb://taoduoduo-mall-cart-service
+          predicates:
+            - Path=/swagger/cart/**
+          filters:
+            - StripPrefix=2

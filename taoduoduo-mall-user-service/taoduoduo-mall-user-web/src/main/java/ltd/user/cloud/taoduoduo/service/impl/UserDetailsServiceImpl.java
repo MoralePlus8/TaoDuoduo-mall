@@ -2,11 +2,11 @@ package ltd.user.cloud.taoduoduo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
-import ltd.user.cloud.taoduoduo.entity.Auth;
+import ltd.common.cloud.taoduoduo.entity.Auth;
 import ltd.common.cloud.taoduoduo.pojo.SecurityAuthority;
 import ltd.user.cloud.taoduoduo.mapper.AuthMapper;
 import ltd.user.cloud.taoduoduo.mapper.UserMapper;
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

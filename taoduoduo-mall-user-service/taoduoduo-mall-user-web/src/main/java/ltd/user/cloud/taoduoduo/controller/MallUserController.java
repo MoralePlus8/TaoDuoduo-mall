@@ -10,7 +10,7 @@ import ltd.common.cloud.taoduoduo.enums.ServiceResultEnum;
 import ltd.user.cloud.taoduoduo.dto.ChangePasswordRequest;
 import ltd.user.cloud.taoduoduo.dto.RegisterRequest;
 import ltd.user.cloud.taoduoduo.dto.UserUpdateRequest;
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.entity.User;
 import ltd.user.cloud.taoduoduo.service.MallUserService;
 import ltd.common.cloud.taoduoduo.util.UserContextUtil;
 import org.slf4j.LoggerFactory;

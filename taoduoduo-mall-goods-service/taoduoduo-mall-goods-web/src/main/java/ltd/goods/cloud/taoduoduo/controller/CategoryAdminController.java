@@ -9,7 +9,7 @@ import ltd.common.cloud.taoduoduo.dto.ResultGenerator;
 import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryRequest;
 import ltd.goods.cloud.taoduoduo.dto.CategorySaveRequest;
 import ltd.goods.cloud.taoduoduo.dto.CategoryUpdateRequest;
-import ltd.goods.cloud.taoduoduo.entity.Category;
+import ltd.common.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

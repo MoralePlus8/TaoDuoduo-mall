@@ -1,4 +1,4 @@
-package ltd.shopcart.cloud.taoduoduo.config;
+package ltd.order.cloud.taoduoduo.config;
 
 import lombok.RequiredArgsConstructor;
 import ltd.commonsecurity.cloud.taoduoduo.filter.JwtAuthenticationFilter;
@@ -20,7 +20,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/**/shopcart/**").hasAuthority("USER")
                 .anyRequest().permitAll();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

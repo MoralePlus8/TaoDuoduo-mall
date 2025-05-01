@@ -2,7 +2,7 @@ package ltd.goods.cloud.taoduoduo.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import ltd.goods.cloud.taoduoduo.entity.Category;
+import ltd.common.cloud.taoduoduo.entity.Category;
 import org.apache.ibatis.annotations.Mapper;
 
 

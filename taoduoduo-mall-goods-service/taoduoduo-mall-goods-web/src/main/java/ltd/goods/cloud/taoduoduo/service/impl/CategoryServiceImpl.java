@@ -11,7 +11,7 @@ import ltd.common.cloud.taoduoduo.exception.DataNotExistException;
 import ltd.common.cloud.taoduoduo.exception.ParamErrorException;
 import ltd.common.cloud.taoduoduo.exception.SameCategoryExistException;
 import ltd.goods.cloud.taoduoduo.dto.CategoryPageQueryRequest;
-import ltd.goods.cloud.taoduoduo.entity.Category;
+import ltd.common.cloud.taoduoduo.entity.Category;
 import ltd.goods.cloud.taoduoduo.mapper.CategoryMapper;
 import ltd.goods.cloud.taoduoduo.service.CategoryService;
 import ltd.goods.cloud.taoduoduo.vo.CategoryVO;

@@ -126,6 +126,12 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>ltd.taoduoduo.cloud</groupId>
+            <artifactId>taoduoduo-mall-common-security</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>

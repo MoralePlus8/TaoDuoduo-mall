@@ -4,8 +4,8 @@ package ltd.goods.cloud.taoduoduo.service;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
 import ltd.goods.cloud.taoduoduo.dto.GoodsPageQueryRequest;
 import ltd.goods.cloud.taoduoduo.dto.StockNumUpdateRequest;
-import ltd.goods.cloud.taoduoduo.entity.Goods;
-import ltd.goods.cloud.taoduoduo.entity.doc.GoodsDoc;
+import ltd.common.cloud.taoduoduo.entity.Goods;
+import ltd.goods.cloud.taoduoduo.doc.GoodsDoc;
 
 import javax.validation.Valid;
 import java.util.List;

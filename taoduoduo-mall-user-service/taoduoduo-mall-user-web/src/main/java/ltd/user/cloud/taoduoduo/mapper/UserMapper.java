@@ -1,7 +1,7 @@
 package ltd.user.cloud.taoduoduo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import ltd.user.cloud.taoduoduo.entity.User;
+import ltd.common.cloud.taoduoduo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

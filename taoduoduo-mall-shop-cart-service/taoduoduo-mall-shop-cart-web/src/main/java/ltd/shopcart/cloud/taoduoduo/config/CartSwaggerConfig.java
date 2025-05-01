@@ -1,4 +1,4 @@
-package ltd.user.cloud.taoduoduo.config;
+package ltd.shopcart.cloud.taoduoduo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Configuration
 @EnableOpenApi
-public class UserSwaggerConfig {
+public class CartSwaggerConfig {
 
     @Bean
     public Docket api() {
@@ -47,7 +47,7 @@ public class UserSwaggerConfig {
 
     private ApiInfo aipInfo(){
         return new ApiInfoBuilder()
-                .title("taoduoduo-mall-user-service接口文档")
+                .title("taoduoduo-mall-cart-service接口文档")
                 .description("swagger接口文档")
                 .version("2.0")
                 .build();
