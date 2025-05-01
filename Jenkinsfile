@@ -32,15 +32,14 @@ pipeline {
                     sh "mkdir -p ${DEPLOY_DIR}"
                     sh "chown -R jenkins:jenkins ${DEPLOY_DIR}"
 
-
-                    cp "taoduoduo-mall-user-service/taoduoduo-mall-user-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-user-service.jar"
-                    cp "taoduoduo-mall-goods-service/taoduoduo-mall-goods-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-goods-service.jar"
-                    cp "taoduoduo-mall-order-service/taoduoduo-mall-order-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-order-service.jar"
-                    cp "taoduoduo-mall-recommend-service/taoduoduo-mall-recommend-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-recommend-service.jar"
-                    cp "taoduoduo-mall-shop-cart-service/taoduoduo-mall-shop-cart-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-shop-cart-service.jar"
-                    cp "taoduoduo-mall-gateway-admin/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-gateway-admin.jar"
-
-
+                    sh """
+                        cp "taoduoduo-mall-user-service/taoduoduo-mall-user-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-user-service.jar"
+                        cp "taoduoduo-mall-goods-service/taoduoduo-mall-goods-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-goods-service.jar"
+                        cp "taoduoduo-mall-order-service/taoduoduo-mall-order-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-order-service.jar"
+                        cp "taoduoduo-mall-recommend-service/taoduoduo-mall-recommend-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-recommend-service.jar"
+                        cp "taoduoduo-mall-shop-cart-service/taoduoduo-mall-shop-cart-web/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-shop-cart-service.jar"
+                        cp "taoduoduo-mall-gateway-admin/target/*.jar" "${DEPLOY_DIR}/taoduoduo-mall-gateway-admin.jar"
+                    """
                 }
             }
         }
