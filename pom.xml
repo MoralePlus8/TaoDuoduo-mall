@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>taoduoduo-mall-common-security</module>
         <module>taoduoduo-mall-common</module>
         <module>taoduoduo-mall-gateway-admin</module>
         <module>taoduoduo-mall-gateway-mall</module>
