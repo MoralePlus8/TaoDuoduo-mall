@@ -71,9 +71,9 @@ def getMicroserviceModules() {
         if (endIndex == -1) break
 
         def module = pomContent.substring(index + moduleStart.length(), endIndex).trim()
-        sh "echo \"Found module: ${module}\""
-        if (fileExists("${module}/src/main/resources/application.yml") ||
+        if (fileExists("${module}/src/main/resources/application.yaml") ||
             fileExists("${module}/src/main/resources/application.properties")) {
+            sh "echo \"Found module: ${module}\""
             modules.add(module)
         }
 
