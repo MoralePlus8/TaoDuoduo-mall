@@ -59,20 +59,26 @@ pipeline {
 // 获取所有微服务模块
 def getMicroserviceModules() {
     def modules = []
-
-    // 方法1：解析pom.xml文件内容
     def pomContent = readFile('pom.xml')
-    def matcher = pomContent =~ /<module>(.*?)<\/module>/
 
-    matcher.each { match ->
-        def module = match[1]
+    // 简单解析模块名 - 不创建Matcher对象
+    def moduleStart = '<module>'
+    def moduleEnd = '</module>'
+    int index = 0
+
+    while ((index = pomContent.indexOf(moduleStart, index)) != -1) {
+        def endIndex = pomContent.indexOf(moduleEnd, index)
+        if (endIndex == -1) break
+
+        def module = pomContent.substring(index + moduleStart.length(), endIndex).trim()
         if (fileExists("${module}/src/main/resources/application.yml") ||
             fileExists("${module}/src/main/resources/application.properties")) {
             modules.add(module)
         }
+
+        index = endIndex + moduleEnd.length()
     }
 
-    // 如果是单模块项目
     if (modules.isEmpty() &&
         (fileExists("src/main/resources/application.yml") ||
          fileExists("src/main/resources/application.properties"))) {
