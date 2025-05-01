@@ -59,19 +59,23 @@ pipeline {
 // 获取所有微服务模块
 def getMicroserviceModules() {
     def modules = []
-    def pom = readMavenPom file: 'pom.xml'
 
-    if (pom.modules) {
-        // 多模块项目
-        pom.modules.each { module ->
-            // 检查是否是Spring Boot应用(有application.properties/yml)
-            if (fileExists("${module}/src/main/resources/application.yml") ||
-                fileExists("${module}/src/main/resources/application.properties")) {
-                modules.add(module)
-            }
+    // 方法1：解析pom.xml文件内容
+    def pomContent = readFile('pom.xml')
+    def matcher = pomContent =~ /<module>(.*?)<\/module>/
+
+    matcher.each { match ->
+        def module = match[1]
+        if (fileExists("${module}/src/main/resources/application.yml") ||
+            fileExists("${module}/src/main/resources/application.properties")) {
+            modules.add(module)
         }
-    } else {
-        // 单模块项目
+    }
+
+    // 如果是单模块项目
+    if (modules.isEmpty() &&
+        (fileExists("src/main/resources/application.yml") ||
+         fileExists("src/main/resources/application.properties"))) {
         modules.add('.')
     }
 
