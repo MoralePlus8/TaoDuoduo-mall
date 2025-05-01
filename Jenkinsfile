@@ -38,7 +38,7 @@ pipeline {
                         cp "taoduoduo-mall-order-service/taoduoduo-mall-order-web/target/taoduoduo-mall-order-web-0.0.1-SNAPSHOT.jar" "${DEPLOY_DIR}/taoduoduo-mall-order-service.jar"
                         cp "taoduoduo-mall-recommend-service/taoduoduo-mall-recommend-web/target/taoduoduo-mall-recommend-web-0.0.1-SNAPSHOT.jar" "${DEPLOY_DIR}/taoduoduo-mall-recommend-service.jar"
                         cp "taoduoduo-mall-shop-cart-service/taoduoduo-mall-shop-cart-web/target/taoduoduo-mall-shop-cart-web-0.0.1-SNAPSHOT.jar" "${DEPLOY_DIR}/taoduoduo-mall-shop-cart-service.jar"
-                        cp "taoduoduo-mall-gateway-admin/target/taoduoduo-mall-gateway-0.0.1-SNAPSHOT.jar" "${DEPLOY_DIR}/taoduoduo-mall-gateway-admin.jar"
+                        cp "taoduoduo-mall-gateway-admin/target/taoduoduo-mall-gateway-admin-0.0.1-SNAPSHOT.jar" "${DEPLOY_DIR}/taoduoduo-mall-gateway-admin.jar"
                     """
                 }
             }
