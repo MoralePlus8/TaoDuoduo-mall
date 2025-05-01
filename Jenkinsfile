@@ -1,11 +1,13 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'jdk8'
+        maven 'M3'
+    }
+
     environment {
-        // 本地部署目录
         DEPLOY_DIR = '/root/java/tdd'
-        // Maven配置
-        MAVEN_HOME = tool 'M3'
     }
 
     stages {
