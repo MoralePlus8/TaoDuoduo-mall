@@ -32,8 +32,8 @@ pipeline {
                     def services = getMicroserviceModules()
 
                     // 确保部署目录存在
-                    sh "sudo mkdir -p ${DEPLOY_DIR}"
-                    sh "sudo chown -R jenkins:jenkins ${DEPLOY_DIR}"
+                    sh "mkdir -p ${DEPLOY_DIR}"
+                    sh "chown -R jenkins:jenkins ${DEPLOY_DIR}"
 
                     // 部署每个服务
                     services.each { service ->
