@@ -48,12 +48,12 @@ pipeline {
             steps {
                 script {
                     sh """
-                        systemctl restart taoduoduo-mall-gateway-admin.service
-                        systemctl restart taoduoduo-mall-user-service.service
-                        systemctl restart taoduoduo-mall-goods-service.service
-                        systemctl restart taoduoduo-mall-order-service.service
-                        systemctl restart taoduoduo-mall-recommend-service.service
-                        systemctl restart taoduoduo-mall-shop-cart-service.service
+                        sudo /bin/systemctl restart taoduoduo-mall-gateway-admin.service
+                        sudo /bin/systemctl restart taoduoduo-mall-user-service.service
+                        sudo /bin/systemctl restart taoduoduo-mall-goods-service.service
+                        sudo /bin/systemctl restart taoduoduo-mall-order-service.service
+                        sudo /bin/systemctl restart taoduoduo-mall-recommend-service.service
+                        sudo /bin/systemctl restart taoduoduo-mall-shop-cart-service.service
                     """
                 }
             }
