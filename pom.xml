@@ -13,7 +13,6 @@
         <module>taoduoduo-mall-common-security</module>
         <module>taoduoduo-mall-common</module>
         <module>taoduoduo-mall-gateway-admin</module>
-        <module>taoduoduo-mall-gateway-mall</module>
         <module>taoduoduo-mall-goods-service</module>
         <module>taoduoduo-mall-order-service</module>
         <module>taoduoduo-mall-recommend-service</module>

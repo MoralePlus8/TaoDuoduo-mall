@@ -42,13 +42,13 @@ spring:
           uri: lb://taoduoduo-mall-order-service
           order: 1
           predicates:
-            - Path=/orders/**
+            - Path=/order/**
 
         - id: cart-service-route
           uri: lb://taoduoduo-mall-cart-service
           order: 1
           predicates:
-              - Path=/carts/**
+              - Path=/shopcart/**
 
         - id: user-service-swagger
           uri: lb://taoduoduo-mall-user-service
@@ -74,7 +74,7 @@ spring:
         - id: order-service-swagger
           uri: lb://taoduoduo-mall-order-service
           predicates:
-            - Path=/swagger/order/**
+            - Path=/swagger/order/**55
           filters:
             - StripPrefix=2
 
