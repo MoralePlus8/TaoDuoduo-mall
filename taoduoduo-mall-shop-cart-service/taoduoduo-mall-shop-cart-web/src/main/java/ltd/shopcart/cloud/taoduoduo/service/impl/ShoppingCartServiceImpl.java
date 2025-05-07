@@ -64,10 +64,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new OutOfStockException();
         }
 
-
         ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
         shoppingCartItem.setGoodsId(cartItemRequest.getGoodsId());
         shoppingCartItem.setUserId(UserContextUtil.getUserId());
+        shoppingCartItem.setGoodsCount(cartItemRequest.getGoodsCount());
         shoppingCartMapper.insert(shoppingCartItem);
 
     }
@@ -114,7 +114,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void deleteById(Long cartItemId) {
-        if(!Objects.equals(UserContextUtil.getUserId(), cartItemId)){
+        ShoppingCartItem shoppingCartItem = shoppingCartMapper.selectById(cartItemId);
+        if(!Objects.equals(UserContextUtil.getUserId(), shoppingCartItem.getUserId())){
             throw new AccessDeniedException();
         }
         if(shoppingCartMapper.deleteById(cartItemId)<1){
