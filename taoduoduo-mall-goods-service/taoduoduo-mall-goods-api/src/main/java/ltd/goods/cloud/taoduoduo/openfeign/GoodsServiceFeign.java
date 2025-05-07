@@ -10,8 +10,8 @@ import java.util.List;
 @FeignClient(value = "taoduoduo-mall-goods-service", path = "/goods/admin")
 public interface GoodsServiceFeign {
 
-    @GetMapping(value = "/detail/{id}")
-    Result getGoodsDetail(@PathVariable("id") Long goodsId);
+    @GetMapping(value = "/{id}")
+    Result getGoods(@PathVariable("id") Long goodsId);
 
     @GetMapping(value = "/listByGoodsIds")
     Result listByGoodsIds(@RequestBody List<Long> goodsIds);

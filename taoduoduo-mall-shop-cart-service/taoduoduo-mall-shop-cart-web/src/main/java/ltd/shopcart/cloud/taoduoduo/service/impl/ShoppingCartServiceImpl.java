@@ -15,7 +15,6 @@ import ltd.shopcart.cloud.taoduoduo.mapper.ShoppingCartMapper;
 import ltd.shopcart.cloud.taoduoduo.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,12 +60,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new ShoppingCartItemExistException();
         }
 
-        Result goodsDetail = goodsService.getGoodsDetail(cartItemRequest.getGoodsId());
-        if (goodsDetail == null || goodsDetail.getResultCode() != 200) {
+        Result goodsResult = goodsService.getGoods(cartItemRequest.getGoodsId());
+        if (goodsResult == null || goodsResult.getResultCode() != 200) {
             throw new DataNotExistException();
         }
 
-        Goods goods = (Goods)(((HashMap<String, Object>)goodsDetail.getData()).get("goods"));
+        Goods goods = (Goods)goodsResult.getData();
         if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
             throw new OutOfStockException();
         }
@@ -98,11 +97,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new DataNotExistException();
         }
 
-        Result goodsDetail = goodsService.getGoodsDetail(cartItemRequest.getGoodsId());
-        if (goodsDetail == null || goodsDetail.getResultCode() != 200) {
+        Result goodsResult = goodsService.getGoods(cartItemRequest.getGoodsId());
+        if (goodsResult == null || goodsResult.getResultCode() != 200) {
             throw new DataNotExistException();
         }
-        Goods goods = (Goods) goodsDetail.getData();
+        Goods goods = (Goods) goodsResult.getData();
         if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
             throw new OutOfStockException();
         }
