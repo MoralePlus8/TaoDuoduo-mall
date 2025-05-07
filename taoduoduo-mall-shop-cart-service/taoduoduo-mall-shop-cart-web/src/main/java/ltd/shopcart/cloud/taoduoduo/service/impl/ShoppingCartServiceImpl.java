@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import ltd.common.cloud.taoduoduo.dto.PageResult;
-import ltd.common.cloud.taoduoduo.dto.Result;
 import ltd.common.cloud.taoduoduo.entity.Goods;
 import ltd.common.cloud.taoduoduo.exception.*;
 import ltd.common.cloud.taoduoduo.util.UserContextUtil;
@@ -60,12 +59,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new ShoppingCartItemExistException();
         }
 
-        Result goodsResult = goodsService.getGoods(cartItemRequest.getGoodsId());
-        if (goodsResult == null || goodsResult.getResultCode() != 200) {
-            throw new DataNotExistException();
-        }
-
-        Goods goods = (Goods)goodsResult.getData();
+        Goods goods = goodsService.getGoods(cartItemRequest.getGoodsId());
         if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
             throw new OutOfStockException();
         }
@@ -97,11 +91,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new DataNotExistException();
         }
 
-        Result goodsResult = goodsService.getGoods(cartItemRequest.getGoodsId());
-        if (goodsResult == null || goodsResult.getResultCode() != 200) {
-            throw new DataNotExistException();
-        }
-        Goods goods = (Goods) goodsResult.getData();
+        Goods goods = goodsService.getGoods(cartItemRequest.getGoodsId());
         if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
             throw new OutOfStockException();
         }

@@ -67,12 +67,10 @@ public class GoodsAdminController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "获取单条商品信息，仅包括商品实体类信息", notes = "根据id查询")
-    public Result getGoodsById(@PathVariable("id") Long id) {
+    public Goods getGoodsById(@PathVariable("id") Long id) {
         logger.info("Get goods by id: {}", id);
 
-        Goods goods = goodsService.getGoodsById(id);
-
-        return ResultGenerator.genSuccessResult(goods);
+        return goodsService.getGoodsById(id);
     }
 
     @GetMapping("/detail/{id}")

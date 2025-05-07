@@ -1,6 +1,7 @@
 package ltd.goods.cloud.taoduoduo.openfeign;
 
 import ltd.common.cloud.taoduoduo.dto.Result;
+import ltd.common.cloud.taoduoduo.entity.Goods;
 import ltd.goods.cloud.taoduoduo.dto.UpdateStockNumDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface GoodsServiceFeign {
 
     @GetMapping(value = "/{id}")
-    Result getGoods(@PathVariable("id") Long goodsId);
+    Goods getGoods(@PathVariable("id") Long goodsId);
 
     @GetMapping(value = "/listByGoodsIds")
     Result listByGoodsIds(@RequestBody List<Long> goodsIds);
