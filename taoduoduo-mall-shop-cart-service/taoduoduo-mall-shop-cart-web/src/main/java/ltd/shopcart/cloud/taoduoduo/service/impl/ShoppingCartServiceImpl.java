@@ -15,6 +15,7 @@ import ltd.shopcart.cloud.taoduoduo.mapper.ShoppingCartMapper;
 import ltd.shopcart.cloud.taoduoduo.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,7 +66,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new DataNotExistException();
         }
 
-        Goods goods = (Goods) goodsDetail.getData();
+        Goods goods = (Goods)((HashMap<String, Object>)goodsDetail.getData()).get("goods");
         if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
             throw new OutOfStockException();
         }
