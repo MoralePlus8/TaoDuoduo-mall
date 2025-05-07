@@ -66,7 +66,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new DataNotExistException();
         }
 
-        Goods goods = (Goods)((HashMap<String, Object>)goodsDetail.getData()).get("goods");
+        Goods goods = (Goods)(((HashMap<String, Object>)goodsDetail.getData()).get("goods"));
         if(goods.getStockNum() < cartItemRequest.getGoodsCount()){
             throw new OutOfStockException();
         }
