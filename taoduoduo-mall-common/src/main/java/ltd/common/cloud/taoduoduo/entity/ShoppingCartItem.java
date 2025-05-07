@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("shopping_cart_item")
+@TableName("tb_taoduoduo_mall_shopping_cart_item")
 public class ShoppingCartItem {
 
     public static class TableAttributes {
