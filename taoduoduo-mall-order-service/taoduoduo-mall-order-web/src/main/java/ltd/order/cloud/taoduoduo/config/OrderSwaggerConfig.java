@@ -26,7 +26,7 @@ public class OrderSwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(aipInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("ltd.user.cloud.taoduoduo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("ltd.order.cloud.taoduoduo.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalRequestParameters(getGlobalRequestParameters());

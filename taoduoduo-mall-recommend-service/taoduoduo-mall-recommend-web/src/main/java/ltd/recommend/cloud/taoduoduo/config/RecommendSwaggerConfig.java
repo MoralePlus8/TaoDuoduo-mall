@@ -26,7 +26,7 @@ public class RecommendSwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(aipInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("ltd.user.cloud.taoduoduo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("ltd.recommend.cloud.taoduoduo.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalRequestParameters(getGlobalRequestParameters());
