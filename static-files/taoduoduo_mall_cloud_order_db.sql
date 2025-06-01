@@ -10,7 +10,8 @@ CREATE TABLE `tb_taoduoduo_mall_order`
     `order_id`     bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '订单表主键id',
     `order_no`     varchar(20)  NOT NULL DEFAULT '' COMMENT '订单号',
     `user_id`      bigint(20)   NOT NULL DEFAULT '0' COMMENT '用户主键id',
-    `total_price`  int(11)      NOT NULL DEFAULT '1' COMMENT '订单总价',
+    `address_id`   bigint(20)   NOT NULL DEFAULT '0' COMMENT '收货地址id',
+    `total_price`  decimal      NOT NULL DEFAULT '1' COMMENT '订单总价',
     `pay_status`   tinyint(4)   NOT NULL DEFAULT '0' COMMENT '支付状态:0.未支付,1.支付成功,-1:支付失败',
     `pay_type`     tinyint(4)   NOT NULL DEFAULT '0' COMMENT '0.无 1.支付宝支付 2.微信支付',
     `pay_time`     timestamp             DEFAULT NULL COMMENT '支付时间',
@@ -23,26 +24,6 @@ CREATE TABLE `tb_taoduoduo_mall_order`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-# Dump of table tb_taoduoduo_mall_order_address
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `tb_taoduoduo_mall_order_address`;
-
-CREATE TABLE `tb_taoduoduo_mall_order_address`
-(
-    `order_id`       bigint(20)  NOT NULL,
-    `user_name`      varchar(30) NOT NULL DEFAULT '' COMMENT '收货人姓名',
-    `user_phone`     varchar(11) NOT NULL DEFAULT '' COMMENT '收货人手机号',
-    `province_name`  varchar(32) NOT NULL DEFAULT '' COMMENT '省',
-    `city_name`      varchar(32) NOT NULL DEFAULT '' COMMENT '城',
-    `region_name`    varchar(32) NOT NULL DEFAULT '' COMMENT '区',
-    `detail_address` varchar(64) NOT NULL DEFAULT '' COMMENT '收件详细地址(街道/楼宇/单元)',
-    PRIMARY KEY (`order_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8 COMMENT ='订单收货地址关联表';
-
-# Dump of table tb_taoduoduo_mall_order_item
-# ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `tb_taoduoduo_mall_order_item`;
 
@@ -53,25 +34,27 @@ CREATE TABLE `tb_taoduoduo_mall_order_item`
     `goods_id`        bigint(20)   NOT NULL DEFAULT '0' COMMENT '关联商品id',
     `goods_name`      varchar(200) NOT NULL DEFAULT '' COMMENT '下单时商品的名称(订单快照)',
     `goods_cover_img` varchar(200) NOT NULL DEFAULT '' COMMENT '下单时商品的主图(订单快照)',
-    `selling_price`   int(11)      NOT NULL DEFAULT '1' COMMENT '下单时商品的价格(订单快照)',
+    `selling_price`   decimal      NOT NULL DEFAULT '1' COMMENT '下单时商品的价格(订单快照)',
     `goods_count`     int(11)      NOT NULL DEFAULT '1' COMMENT '数量(订单快照)',
     `create_time`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    INDEX `idx_order_id` (`order_id`) USING BTREE,
     PRIMARY KEY (`order_item_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS `tb_taoduoduo_mall_user_address`;
 
-CREATE TABLE `tb_taoduoduo_mall_user_address`
+DROP TABLE IF EXISTS tb_taoduoduo_mall_address;
+
+CREATE TABLE `tb_taoduoduo_mall_address`
 (
     `address_id`     bigint(20)  NOT NULL AUTO_INCREMENT,
     `user_id`        bigint(20)  NOT NULL DEFAULT '0' COMMENT '用户主键id',
     `user_name`      varchar(30) NOT NULL DEFAULT '' COMMENT '收货人姓名',
     `user_phone`     varchar(11) NOT NULL DEFAULT '' COMMENT '收货人手机号',
     `default_flag`   tinyint(1)  NOT NULL DEFAULT '0' COMMENT '是否为默认 0-非默认 1-是默认',
-    `province_name`  varchar(32) NOT NULL DEFAULT '' COMMENT '省',
-    `city_name`      varchar(32) NOT NULL DEFAULT '' COMMENT '城',
-    `region_name`    varchar(32) NOT NULL DEFAULT '' COMMENT '区',
+    `province`       varchar(32) NOT NULL DEFAULT '' COMMENT '省',
+    `city`           varchar(32) NOT NULL DEFAULT '' COMMENT '城',
+    `region`         varchar(32) NOT NULL DEFAULT '' COMMENT '区',
     `detail_address` varchar(64) NOT NULL DEFAULT '' COMMENT '收件详细地址(街道/楼宇/单元)',
     `is_deleted`     tinyint(1)  NOT NULL DEFAULT '0' COMMENT '删除标识字段(0-未删除 1-已删除)',
     `create_time`    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
