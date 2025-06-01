@@ -74,7 +74,7 @@ spring:
         - id: order-service-swagger
           uri: lb://taoduoduo-mall-order-service
           predicates:
-            - Path=/swagger/order/**55
+            - Path=/swagger/order/**
           filters:
             - StripPrefix=2
 
