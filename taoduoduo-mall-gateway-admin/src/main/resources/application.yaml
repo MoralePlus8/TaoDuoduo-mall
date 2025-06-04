@@ -14,6 +14,17 @@ spring:
       password: nacos
 
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:8080"
+            allowed-origin-patterns:
+              - "http://*:8080"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+
       discovery:
         locator:
           enabled: true
