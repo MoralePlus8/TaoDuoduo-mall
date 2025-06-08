@@ -29,7 +29,7 @@ public class CategorySyncTask {
     @Value("${redis.path.category.level3}")
     private String level3Path;
 
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void syncCategoryToRedis() {
 
         LocalDateTime endTime = LocalDateTime.now();
