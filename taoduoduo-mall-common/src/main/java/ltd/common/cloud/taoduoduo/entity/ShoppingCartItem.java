@@ -3,11 +3,14 @@ package ltd.common.cloud.taoduoduo.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("tb_taoduoduo_mall_shopping_cart_item")
-public class ShoppingCartItem {
+public class ShoppingCartItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static class TableAttributes {
         private TableAttributes() {}

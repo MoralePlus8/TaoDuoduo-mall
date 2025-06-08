@@ -3,13 +3,16 @@ package ltd.common.cloud.taoduoduo.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @TableName("tb_taoduoduo_mall_order")
-public class Order {
+public class Order implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static class TableAttributes {
         private TableAttributes() {}

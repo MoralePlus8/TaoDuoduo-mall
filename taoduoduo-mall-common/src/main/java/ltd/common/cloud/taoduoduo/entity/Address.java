@@ -3,11 +3,14 @@ package ltd.common.cloud.taoduoduo.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("tb_taoduoduo_mall_address")
-public class Address {
+public class Address implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static class TableAttributes {
         private TableAttributes() {}

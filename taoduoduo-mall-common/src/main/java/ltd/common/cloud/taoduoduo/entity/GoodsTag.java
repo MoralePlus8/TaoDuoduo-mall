@@ -6,9 +6,13 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @TableName("tb_taoduoduo_mall_goods_tag")
-public class GoodsTag {
+public class GoodsTag implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static class TableAttributes {
         private TableAttributes() {}
