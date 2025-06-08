@@ -29,11 +29,11 @@ public class CategorySyncTask {
     @Value("${redis.path.category.level3}")
     private String level3Path;
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 2 * * ?")
     public void syncCategoryToRedis() {
 
         LocalDateTime endTime = LocalDateTime.now();
-        LocalDateTime startTime = endTime.minusHours(1);
+        LocalDateTime startTime = endTime.minusDays(1);
 
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
         queryWrapper.between(Category.TableAttributes.UPDATE_TIME, startTime, endTime);
