@@ -29,7 +29,7 @@ public class ShoppingCartController {
 
     @GetMapping("/page")
     @ApiOperation(value = "购物车列表(每页默认5条)", notes = "传参为页码")
-    public Result pageList(Integer pageNumber) {
+    public Result pageList(@RequestParam Integer pageNumber) {
         PageResult<ShoppingCartItem> pageResult = shoppingCartService.pageQuery(pageNumber);
 
         return ResultGenerator.genSuccessResult(pageResult);
