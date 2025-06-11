@@ -62,11 +62,8 @@ public class MallUserServiceImpl implements MallUserService {
     @Override
     public Boolean changePasswordById(Long userId, String originalPassword, String newPassword) throws WrongPasswordException {
         User user = userMapper.selectById(userId);
-        if(user != null && passwordEncoder.matches(originalPassword, user.getPassword())){
-            user.setPassword(passwordEncoder.encode(newPassword));
-            return userMapper.updateById(user) > 0;
-        }
-        throw new WrongPasswordException();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return userMapper.updateById(user) > 0;
     }
 
     @Override
