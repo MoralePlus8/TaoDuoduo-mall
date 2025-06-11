@@ -42,7 +42,7 @@ public class GoodsController {
         return ResultGenerator.genSuccessResult(goodsDetailVO);
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     @ApiOperation(value = "商品列表", notes = "可根据名称和上架状态筛选")
     public Result list(@RequestBody @Valid GoodsPageQueryRequest goodsPageQueryRequest) {
         logger.info("Get the list of goods: {}", goodsPageQueryRequest);

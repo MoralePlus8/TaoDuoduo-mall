@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value = "v1", tags = "淘多多商城个人地址相关接口")
-@RequestMapping("/address")
+@RequestMapping("/order/address")
 @RequiredArgsConstructor
 public class UserAddressController {
 
